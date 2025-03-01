@@ -102,11 +102,45 @@ mathServer.tool("mean", "Calculates the arithmetic mean of a list of numbers", {
 }, async ({ numbers }) => {
     // Calculate sum and divide by the count of numbers
     const sum = numbers.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-    const average = sum / numbers.length;
+    const mean = sum / numbers.length;
     return {
         content: [{
                 type: "text",
-                text: `${average}`
+                text: `${mean}`
+            }]
+    };
+});
+/**
+ * Median operation
+ * Calculates the median of an array of numbers
+ */
+mathServer.tool("median", "Calculates the median of a list of numbers", {
+    numbers: z.array(z.number()).describe("Array of numbers to find the median of")
+}, async ({ numbers }) => {
+    if (numbers.length === 0) {
+        return {
+            content: [{
+                    type: "text",
+                    text: `An empty array was passed in`
+                }]
+        };
+    }
+    //Sort numbers
+    numbers.sort();
+    const medianIndex = numbers.length / 2;
+    let medianValue;
+    if (numbers.length % 2 !== 0) {
+        //If number is odd
+        medianValue = numbers[Math.floor(medianIndex)];
+    }
+    else {
+        //If number is even
+        medianValue = (numbers[medianIndex] + numbers[medianIndex - 1]) / 2;
+    }
+    return {
+        content: [{
+                type: "text",
+                text: `${medianValue}`
             }]
     };
 });
