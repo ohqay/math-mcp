@@ -102,11 +102,11 @@ mathServer.tool("sum", "Adds any number of numbers together", {
 })
 
 /**
- * Average operation
+ * Mean operation
  * Calculates the arithmetic mean of an array of numbers
  */
-mathServer.tool("average", "Calculates the arithmetic mean of a list of numbers", {
-    numbers: z.array(z.number()).describe("Array of numbers to find the average of")
+mathServer.tool("mean", "Calculates the arithmetic mean of a list of numbers", {
+    numbers: z.array(z.number()).describe("Array of numbers to find the mean of")
 }, async ({ numbers }) => {
     // Calculate sum and divide by the count of numbers
     const sum = numbers.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
@@ -115,6 +115,49 @@ mathServer.tool("average", "Calculates the arithmetic mean of a list of numbers"
         content: [{
             type: "text",
             text: `${average}`
+        }]
+    }
+})
+
+/**
+ * Mode operation
+ * Finds the most common number in an array of numbers
+ */
+mathServer.tool("mode", "Finds the most common number in a list of numbers", {
+    numbers: z.array(z.number()).describe("Array of numbers to find the mode of")
+}, async ({ numbers }) => {
+    const modeMap = new Map<number, number>()
+
+    //Set each entry parameter into the map and assign it the number of times it appears in the list
+    numbers.forEach((value) => {
+        if (modeMap.has(value)) {
+            modeMap.set(value, modeMap.get(value)! + 1)
+        } else {
+            modeMap.set(value, 1)
+        }
+    });
+
+    //Find the max frequency in the map
+    let maxFrequency = 0;
+    for (const numberFrequency of modeMap.values()) {
+        if (numberFrequency > maxFrequency) {
+            maxFrequency = numberFrequency;
+        }
+    }
+
+
+    const modeResult = []
+    //Find the entries with the highest frequency
+    for(const [key, value] of modeMap.entries()){
+        if(value === maxFrequency){
+            modeResult.push(key)
+        }
+    }
+
+    return {
+        content: [{
+            type: "text",
+            text: `Entries (${modeResult.join(', ')}) appeared ${maxFrequency} times`
         }]
     }
 })
