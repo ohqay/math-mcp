@@ -1,68 +1,98 @@
+/**
+ * Math MCP Server
+ * 
+ * This file implements a Model Context Protocol (MCP) server that provides
+ * various mathematical operations as tools. Each tool accepts numeric inputs
+ * and returns the calculated result.
+ */
+
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 
-const server = new McpServer({
+// Initialize the MCP server with name and version
+const mathServer = new McpServer({
     name: "math",
     version: "1.0.0"
 })
 
-server.tool("add", "Adds two numbers together", {
-    numberA: z.number().describe("The first number"),
-    numberB: z.number().describe("The second number")
-}, async ({ numberA, numberB }) => {
-    const total = numberA + numberB
+/**
+ * Addition operation
+ * Adds two numbers and returns their sum
+ */
+mathServer.tool("add", "Adds two numbers together", {
+    firstNumber: z.number().describe("The first addend"),
+    secondNumber: z.number().describe("The second addend")
+}, async ({ firstNumber, secondNumber }) => {
+    const sum = firstNumber + secondNumber;
     return {
         content: [{
             type: "text",
-            text: `${total}`
+            text: `${sum}`
         }]
     }
 })
 
-server.tool("subtract", "Subtract numberA from numberB", {
-    numberA: z.number().describe("The number being subtracted"),
-    numberB: z.number().describe("The number subtracting")
-}, async ({ numberA, numberB }) => {
-    const total = numberA - numberB
+/**
+ * Subtraction operation
+ * Subtracts the second number from the first number
+ */
+mathServer.tool("subtract", "Subtracts the second number from the first number", {
+    minuend: z.number().describe("The number to subtract from (minuend)"),
+    subtrahend: z.number().describe("The number being subtracted (subtrahend)")
+}, async ({ minuend, subtrahend }) => {
+    const difference = minuend - subtrahend;
     return {
         content: [{
             type: "text",
-            text: `${total}`
+            text: `${difference}`
         }]
     }
 })
 
-server.tool("multiply", "Multiply numberA and numberB", {
-    numberA: z.number().describe("The first number"),
-    numberB: z.number().describe("The second number")
-}, async ({ numberA, numberB }) => {
-    const total = numberA * numberB
+/**
+ * Multiplication operation
+ * Multiplies two numbers together
+ */
+mathServer.tool("multiply", "Multiplies two numbers together", {
+    firstFactor: z.number().describe("The first factor"),
+    secondFactor: z.number().describe("The second factor")
+}, async ({ firstFactor, secondFactor }) => {
+    const product = firstFactor * secondFactor;
     return {
         content: [{
             type: "text",
-            text: `${total}`
+            text: `${product}`
         }]
     }
 })
 
-server.tool("division", "Divide numberB from numberA", {
-    numberA: z.number().describe("The numerator"),
-    numberB: z.number().describe("The devisor")
-}, async ({ numberA, numberB }) => {
-    const total = numberA / numberB
+/**
+ * Division operation
+ * Divides the first number by the second number
+ */
+mathServer.tool("division", "Divides the first number by the second number", {
+    numerator: z.number().describe("The number being divided (numerator)"),
+    denominator: z.number().describe("The number to divide by (denominator)")
+}, async ({ numerator, denominator }) => {
+    const quotient = numerator / denominator;
     return {
         content: [{
             type: "text",
-            text: `${total}`
+            text: `${quotient}`
         }]
     }
 })
 
-server.tool("sum", "Adds any number of numbers together", {
+/**
+ * Sum operation
+ * Calculates the sum of an array of numbers
+ */
+mathServer.tool("sum", "Adds any number of numbers together", {
     numbers: z.array(z.number()).describe("Array of numbers to sum")
 }, async ({ numbers }) => {
-    const sum = numbers.reduce((total, num) => total + num, 0);
+    // Use reduce to accumulate the sum, starting with 0
+    const sum = numbers.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
     return {
         content: [{
             type: "text",
@@ -71,77 +101,106 @@ server.tool("sum", "Adds any number of numbers together", {
     }
 })
 
-server.tool("average", "Finds the average of a list of numbers", {
+/**
+ * Average operation
+ * Calculates the arithmetic mean of an array of numbers
+ */
+mathServer.tool("average", "Calculates the arithmetic mean of a list of numbers", {
     numbers: z.array(z.number()).describe("Array of numbers to find the average of")
 }, async ({ numbers }) => {
-    const sum = numbers.reduce((total, num) => total + num, 0) / numbers.length;
+    // Calculate sum and divide by the count of numbers
+    const sum = numbers.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    const average = sum / numbers.length;
     return {
         content: [{
             type: "text",
-            text: `${sum}`
+            text: `${average}`
         }]
     }
 })
 
-server.tool("min", "Finds the minimum from a list of numbers", {
+/**
+ * Minimum operation
+ * Finds the smallest number in an array
+ */
+mathServer.tool("min", "Finds the minimum value from a list of numbers", {
     numbers: z.array(z.number()).describe("Array of numbers to find the minimum of")
 }, async ({ numbers }) => {
-    const sum = Math.min(...numbers);
+    const minValue = Math.min(...numbers);
     return {
         content: [{
             type: "text",
-            text: `${sum}`
+            text: `${minValue}`
         }]
     }
 })
 
-server.tool("max", "Finds the maximum from a list of numbers", {
+/**
+ * Maximum operation
+ * Finds the largest number in an array
+ */
+mathServer.tool("max", "Finds the maximum value from a list of numbers", {
     numbers: z.array(z.number()).describe("Array of numbers to find the maximum of")
 }, async ({ numbers }) => {
-    const sum = Math.max(...numbers);
+    const maxValue = Math.max(...numbers);
     return {
         content: [{
             type: "text",
-            text: `${sum}`
+            text: `${maxValue}`
         }]
     }
 })
 
-server.tool("floor", "Rounds a number down", {
-    numberA: z.number().describe("The number"),
-}, async ({ numberA }) => {
-    const num = Math.floor(numberA)
+/**
+ * Floor operation
+ * Rounds a number down to the nearest integer
+ */
+mathServer.tool("floor", "Rounds a number down to the nearest integer", {
+    value: z.number().describe("The number to round down"),
+}, async ({ value }) => {
+    const floorValue = Math.floor(value);
     return {
         content: [{
             type: "text",
-            text: `${num}`
+            text: `${floorValue}`
         }]
     }
 })
 
-server.tool("Ceiling", "Rounds a number up", {
-    numberA: z.number().describe("The number"),
-}, async ({ numberA }) => {
-    const num = Math.ceil(numberA)
+/**
+ * Ceiling operation
+ * Rounds a number up to the nearest integer
+ */
+mathServer.tool("ceiling", "Rounds a number up to the nearest integer", {
+    value: z.number().describe("The number to round up"),
+}, async ({ value }) => {
+    const ceilingValue = Math.ceil(value);
     return {
         content: [{
             type: "text",
-            text: `${num}`
+            text: `${ceilingValue}`
         }]
     }
 })
 
-server.tool("Round", "Rounds a number", {
-    numberA: z.number().describe("The number"),
-}, async ({ numberA }) => {
-    const num = Math.round(numberA)
+/**
+ * Round operation
+ * Rounds a number to the nearest integer
+ */
+mathServer.tool("round", "Rounds a number to the nearest integer", {
+    value: z.number().describe("The number to round"),
+}, async ({ value }) => {
+    const roundedValue = Math.round(value);
     return {
         content: [{
             type: "text",
-            text: `${num}`
+            text: `${roundedValue}`
         }]
     }
 })
 
+// Initialize the server transport and connect
 const transport = new StdioServerTransport();
-await server.connect(transport)
+await mathServer.connect(transport);
+
+// Server is now running and ready to process requests
