@@ -1,6 +1,6 @@
 {
   "name": "math-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "build/index.js",
   "type":"module",
   "scripts": {
@@ -10,7 +10,7 @@
   "keywords": [],
   "files": ["build"],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "description": "",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.6.0",
