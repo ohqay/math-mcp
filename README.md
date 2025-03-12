@@ -2,6 +2,10 @@
 
 A Model Context Protocol (MCP) server that provides basic mathematical and statistical functions to Large Language Models (LLMs). This server enables LLMs to perform accurate numerical calculations through a simple API.
 
+<a href="https://glama.ai/mcp/servers/exa5lt8dgd">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/exa5lt8dgd/badge" alt="Math-MCP MCP server" />
+</a>
+
 ## Features
 
 - Basic arithmetic operations (addition, subtraction, multiplication, division)
