@@ -1,5 +1,7 @@
 # Math-MCP
 
+[![smithery badge](https://smithery.ai/badge/@EthanHenrickson/math-mcp)](https://smithery.ai/server/@EthanHenrickson/math-mcp)
+
 A Model Context Protocol (MCP) server that provides basic mathematical and statistical functions to Large Language Models (LLMs). This server enables LLMs to perform accurate numerical calculations through a simple API.
 
 <a href="https://glama.ai/mcp/servers/exa5lt8dgd">
@@ -13,6 +15,13 @@ A Model Context Protocol (MCP) server that provides basic mathematical and stati
 - Rounding functions (floor, ceiling, round)
 
 ## Installation
+### Installing via Smithery
+
+To install Math-MCP for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@EthanHenrickson/math-mcp):
+
+```bash
+npx -y @smithery/cli install @EthanHenrickson/math-mcp --client claude
+```
 
 Just clone this repository and save it locally somewhere on your computer.
 
