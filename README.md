@@ -23,6 +23,8 @@ To install Math-MCP for Claude Desktop automatically via [Smithery](https://smit
 npx -y @smithery/cli install @EthanHenrickson/math-mcp --client claude
 ```
 
+### Installing Manually
+
 Just clone this repository and save it locally somewhere on your computer.
 
 Then add this server to your MCP configuration file:
