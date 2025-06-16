@@ -49,7 +49,7 @@ export class ExpressionEvaluator {
         const cleaned = expression.replace(/\s+/g, '');
         
         // Regular expression to match tokens
-        const tokenRegex = /([a-zA-Z_][a-zA-Z0-9_]*|\d+\.?\d*|\[[\d,.\s-]+\]|[+\-*/^()])/g;
+        const tokenRegex = /([a-zA-Z_][a-zA-Z0-9_]*|\d+\.?\d*|\[[\d,.\s-]+\]|[+\-*/^(),])/g;
         const tokens = cleaned.match(tokenRegex);
         
         if (!tokens) {
@@ -93,10 +93,13 @@ export class ExpressionEvaluator {
      * Evaluates a function call
      * @param funcName - Name of the function
      * @param args - Arguments for the function
-     * @returns The result of the function call (number or number[])
+     * @returns The result of the function call
      */
     private static evaluateFunction(funcName: string, args: (number | number[])[]): number | number[] {
-        switch (funcName.toLowerCase()) {
+        const lowerFuncName = funcName.toLowerCase();
+        
+        switch (lowerFuncName) {
+            // Arithmetic functions (single numeric argument)
             case 'sqrt':
                 if (args.length !== 1 || Array.isArray(args[0])) {
                     throw new Error('sqrt() requires exactly one numeric argument');
@@ -109,11 +112,94 @@ export class ExpressionEvaluator {
                 }
                 return Arithmetic.abs(args[0] as number);
                 
+            case 'floor':
+                if (args.length !== 1 || Array.isArray(args[0])) {
+                    throw new Error('floor() requires exactly one numeric argument');
+                }
+                return Arithmetic.floor(args[0] as number);
+                
+            case 'ceil':
+                if (args.length !== 1 || Array.isArray(args[0])) {
+                    throw new Error('ceil() requires exactly one numeric argument');
+                }
+                return Arithmetic.ceil(args[0] as number);
+                
+            case 'round':
+                if (args.length !== 1 || Array.isArray(args[0])) {
+                    throw new Error('round() requires exactly one numeric argument');
+                }
+                return Arithmetic.round(args[0] as number);
+                
+            case 'factorial':
+                if (args.length !== 1 || Array.isArray(args[0])) {
+                    throw new Error('factorial() requires exactly one numeric argument');
+                }
+                return Arithmetic.factorial(args[0] as number);
+                
+            // Arithmetic functions (two numeric arguments)
+            case 'power':
+                if (args.length !== 2 || Array.isArray(args[0]) || Array.isArray(args[1])) {
+                    throw new Error('power() requires exactly two numeric arguments');
+                }
+                return Arithmetic.power(args[0] as number, args[1] as number);
+                
+            case 'gcd':
+                if (args.length !== 2 || Array.isArray(args[0]) || Array.isArray(args[1])) {
+                    throw new Error('gcd() requires exactly two numeric arguments');
+                }
+                return Arithmetic.gcd(args[0] as number, args[1] as number);
+                
+            case 'lcm':
+                if (args.length !== 2 || Array.isArray(args[0]) || Array.isArray(args[1])) {
+                    throw new Error('lcm() requires exactly two numeric arguments');
+                }
+                return Arithmetic.lcm(args[0] as number, args[1] as number);
+                
+            // Precision functions (two numeric arguments)
+            case 'roundtoprecision':
+                if (args.length !== 2 || Array.isArray(args[0]) || Array.isArray(args[1])) {
+                    throw new Error('roundToPrecision() requires exactly two numeric arguments');
+                }
+                return Arithmetic.roundToPrecision(args[0] as number, args[1] as number);
+                
+            case 'floortoprecision':
+                if (args.length !== 2 || Array.isArray(args[0]) || Array.isArray(args[1])) {
+                    throw new Error('floorToPrecision() requires exactly two numeric arguments');
+                }
+                return Arithmetic.floorToPrecision(args[0] as number, args[1] as number);
+                
+            case 'ceiltoprecision':
+                if (args.length !== 2 || Array.isArray(args[0]) || Array.isArray(args[1])) {
+                    throw new Error('ceilToPrecision() requires exactly two numeric arguments');
+                }
+                return Arithmetic.ceilToPrecision(args[0] as number, args[1] as number);
+                
+            // Array functions (single array argument)
+            case 'sum':
+                if (args.length !== 1 || !Array.isArray(args[0])) {
+                    throw new Error('sum() requires exactly one array argument');
+                }
+                return Arithmetic.sum(args[0] as number[]);
+                
             case 'mean':
                 if (args.length !== 1 || !Array.isArray(args[0])) {
                     throw new Error('mean() requires exactly one array argument');
                 }
                 return Statistics.mean(args[0] as number[]);
+                
+            case 'median':
+                if (args.length !== 1 || !Array.isArray(args[0])) {
+                    throw new Error('median() requires exactly one array argument');
+                }
+                return Statistics.median(args[0] as number[]);
+                
+            case 'mode':
+                if (args.length !== 1 || !Array.isArray(args[0])) {
+                    throw new Error('mode() requires exactly one array argument');
+                }
+                const modeResult = Statistics.mode(args[0] as number[]);
+                // If mode returns multiple values, return the first one for expression evaluation
+                return Array.isArray(modeResult) ? modeResult[0] : modeResult;
                 
             case 'min':
                 if (args.length !== 1 || !Array.isArray(args[0])) {
@@ -127,6 +213,47 @@ export class ExpressionEvaluator {
                 }
                 return Statistics.max(args[0] as number[]);
                 
+            case 'variance':
+                if (args.length !== 1 || !Array.isArray(args[0])) {
+                    throw new Error('variance() requires exactly one array argument');
+                }
+                return Statistics.variance(args[0] as number[]);
+                
+            case 'standarddeviation':
+                if (args.length !== 1 || !Array.isArray(args[0])) {
+                    throw new Error('standardDeviation() requires exactly one array argument');
+                }
+                return Statistics.standardDeviation(args[0] as number[]);
+                
+            case 'range':
+                if (args.length !== 1 || !Array.isArray(args[0])) {
+                    throw new Error('range() requires exactly one array argument');
+                }
+                return Statistics.range(args[0] as number[]);
+                
+            // Array functions that return arrays (for complex expressions, return first element)
+            case 'normalizearray':
+                if (args.length !== 1 || !Array.isArray(args[0])) {
+                    throw new Error('normalizeArray() requires exactly one array argument');
+                }
+                const normalized = DataScience.normalizeArray(args[0] as number[]);
+                return normalized[0]; // Return first element for expression evaluation
+                
+            case 'standardizearray':
+                if (args.length !== 1 || !Array.isArray(args[0])) {
+                    throw new Error('standardizeArray() requires exactly one array argument');
+                }
+                const standardized = DataScience.standardizeArray(args[0] as number[]);
+                return standardized[0]; // Return first element for expression evaluation
+                
+            // Functions with array and numeric arguments
+            case 'percentile':
+                if (args.length !== 2 || !Array.isArray(args[0]) || Array.isArray(args[1])) {
+                    throw new Error('percentile() requires one array argument and one numeric argument');
+                }
+                return Statistics.percentile(args[0] as number[], args[1] as number);
+                
+            // Functions with two array arguments
             case 'correlation':
                 if (args.length !== 2 || !Array.isArray(args[0]) || !Array.isArray(args[1])) {
                     throw new Error('correlation() requires exactly two array arguments');
@@ -139,23 +266,12 @@ export class ExpressionEvaluator {
                 }
                 return Statistics.covariance(args[0] as number[], args[1] as number[]);
                 
+            // Functions with three numeric arguments
             case 'zscore':
                 if (args.length !== 3 || Array.isArray(args[0]) || Array.isArray(args[1]) || Array.isArray(args[2])) {
                     throw new Error('zscore() requires exactly three numeric arguments: value, mean, stdDev');
                 }
                 return Statistics.zscore(args[0] as number, args[1] as number, args[2] as number);
-                
-            case 'normalizearray':
-                if (args.length !== 1 || !Array.isArray(args[0])) {
-                    throw new Error('normalizeArray() requires exactly one array argument');
-                }
-                return DataScience.normalizeArray(args[0] as number[]);
-                
-            case 'standardizearray':
-                if (args.length !== 1 || !Array.isArray(args[0])) {
-                    throw new Error('standardizeArray() requires exactly one array argument');
-                }
-                return DataScience.standardizeArray(args[0] as number[]);
                 
             default:
                 throw new Error(`Unsupported function in expression: ${funcName}`);
@@ -180,10 +296,9 @@ export class ExpressionEvaluator {
      * @returns Either a number or an array
      */
     private static parseArgumentExpression(tokens: string[], index: { value: number }): number | number[] {
-        // Check if this is a function call that might return an array
+        // Check if this is a function call
         if (index.value < tokens.length && 
-            this.FUNCTIONS.includes(tokens[index.value].toLowerCase()) &&
-            (tokens[index.value].toLowerCase() === 'normalizearray' || tokens[index.value].toLowerCase() === 'standardizearray')) {
+            this.FUNCTIONS.includes(tokens[index.value].toLowerCase())) {
             
             const funcName = tokens[index.value].toLowerCase();
             index.value++;
@@ -230,7 +345,14 @@ export class ExpressionEvaluator {
             }
             
             index.value++; // Skip closing parenthesis
-            return this.evaluateFunction(funcName, args);
+            const result = this.evaluateFunction(funcName, args);
+            
+            // Ensure we return a number for expression evaluation
+            if (typeof result === 'number') {
+                return result;
+            } else {
+                throw new Error(`Function ${funcName} returned a non-numeric result that cannot be used in expressions`);
+            }
         }
         
         // Otherwise, parse as a regular numeric expression
