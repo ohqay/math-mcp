@@ -281,4 +281,79 @@ export class Arithmetic {
         const ceiled = Math.ceil(number * multiplier) / multiplier;
         return ceiled;
     }
+
+    /**
+     * Calculate the greatest common divisor (GCD) of two integers using Euclidean algorithm
+     * @param a - The first integer
+     * @param b - The second integer
+     * @returns greatest common divisor of a and b
+     * @throws Error if either number is invalid or not an integer
+     */
+    static gcd(a: number, b: number): number {
+        this.validateInteger(a, 'a');
+        this.validateInteger(b, 'b');
+        
+        // Handle negative numbers by taking absolute values
+        a = Math.abs(a);
+        b = Math.abs(b);
+        
+        // Euclidean algorithm
+        while (b !== 0) {
+            const temp = b;
+            b = a % b;
+            a = temp;
+        }
+        
+        return a;
+    }
+
+    /**
+     * Calculate the least common multiple (LCM) of two integers
+     * @param a - The first integer
+     * @param b - The second integer
+     * @returns least common multiple of a and b
+     * @throws Error if either number is invalid or not an integer
+     */
+    static lcm(a: number, b: number): number {
+        this.validateInteger(a, 'a');
+        this.validateInteger(b, 'b');
+        
+        // Handle zero case
+        if (a === 0 || b === 0) {
+            return 0;
+        }
+        
+        // LCM(a,b) = |a * b| / GCD(a,b)
+        const gcdValue = this.gcd(a, b);
+        const lcm = Math.abs(a * b) / gcdValue;
+        
+        return lcm;
+    }
+
+    /**
+     * Calculate the factorial of a non-negative integer
+     * @param n - The non-negative integer to calculate factorial of
+     * @returns factorial of n (n!)
+     * @throws Error if n is invalid, not an integer, or negative
+     */
+    static factorial(n: number): number {
+        this.validateInteger(n, 'n');
+        
+        if (n < 0) {
+            throw new Error('n must be a non-negative integer for factorial calculation');
+        }
+        
+        // Handle special case: 0! = 1
+        if (n === 0) {
+            return 1;
+        }
+        
+        // Calculate factorial iteratively
+        let result = 1;
+        for (let i = 1; i <= n; i++) {
+            result *= i;
+        }
+        
+        return result;
+    }
 }

@@ -410,6 +410,59 @@ mathServer.tool("abs", "Calculates the absolute value of a number", {
     }
 })
 
+/**
+ * GCD operation
+ * Calculates the greatest common divisor of two integers using Euclidean algorithm
+ */
+mathServer.tool("gcd", "Calculates the greatest common divisor (GCD) of two integers", {
+    a: z.number().int().describe("The first integer"),
+    b: z.number().int().describe("The second integer")
+}, async ({ a, b }) => {
+    const value = Arithmetic.gcd(a, b)
+
+    return {
+        content: [{
+            type: "text",
+            text: `${value}`
+        }]
+    }
+})
+
+/**
+ * LCM operation
+ * Calculates the least common multiple of two integers
+ */
+mathServer.tool("lcm", "Calculates the least common multiple (LCM) of two integers", {
+    a: z.number().int().describe("The first integer"),
+    b: z.number().int().describe("The second integer")
+}, async ({ a, b }) => {
+    const value = Arithmetic.lcm(a, b)
+
+    return {
+        content: [{
+            type: "text",
+            text: `${value}`
+        }]
+    }
+})
+
+/**
+ * Factorial operation
+ * Calculates the factorial of a non-negative integer
+ */
+mathServer.tool("factorial", "Calculates the factorial of a non-negative integer", {
+    n: z.number().int().min(0).describe("The non-negative integer to calculate factorial of")
+}, async ({ n }) => {
+    const value = Arithmetic.factorial(n)
+
+    return {
+        content: [{
+            type: "text",
+            text: `${value}`
+        }]
+    }
+})
+
 // Initialize the server transport and connect
 const transport = new StdioServerTransport();
 await mathServer.connect(transport);
