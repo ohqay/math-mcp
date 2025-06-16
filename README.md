@@ -17,7 +17,7 @@ A comprehensive Model Context Protocol (MCP) server that provides LLMs with **34
 
 The `evaluate` tool is the most powerful feature, allowing complex mathematical expressions in a single call:
 
-- **Complex Mathematical Expressions**: Evaluate sophisticated mathematical expressions 
+- **Complex Mathematical Expressions**: Evaluate sophisticated mathematical expressions
 - **Function Composition**: Chain mathematical functions together seamlessly
 - **Array Support**: Use array notation `[1,2,3,4,5]` directly in expressions
 - **Operator Support**: Full support for `+`, `-`, `*`, `/`, `^` (power), `%` (modulo) operators
@@ -66,75 +66,22 @@ The `evaluate` tool is the most powerful feature, allowing complex mathematical 
 
     Replace `PATH/TO/PROJECT` with the actual path where you cloned the repository.
 
-## 💡 Usage Examples
-
-### Expression Evaluator
-
-The `evaluate` tool is the most powerful feature, allowing complex mathematical expressions:
-
-```javascript
-// Financial calculations
-evaluate('(1 + 0.05)^10 * 10000'); // → Compound interest: $16,288.95
-
-// Statistics with embedded calculations
-evaluate('mean([1,2,3,4,5]) + variance([10,20,30,40,50])'); // → Mean + variance
-
-// Advanced mathematical operations
-evaluate('factorial(5) + gcd(48, 18) * sqrt(16)'); // → 120 + 6 * 4 = 144
-
-// Machine learning preprocessing
-evaluate('correlation([1,2,3,4], [2,4,6,8]) * 100'); // → Perfect correlation: 100
-
-// Complex statistical analysis
-evaluate('zscore(85, mean([70,75,80,85,90]), standardDeviation([70,75,80,85,90]))');
-
-// Modulo operations in expressions
-evaluate('17 % 5 + power(2, 3)'); // → 2 + 8 = 10
-evaluate('(100 % 7) * factorial(3)'); // → 2 * 6 = 12
-```
-
-### Individual Tool Usage
-
-Each mathematical operation is also available as a standalone tool:
-
-```javascript
-// Basic arithmetic
-add(15, 27); // → 42
-multiply(6, 7); // → 42
-power(2, 10); // → 1024
-
-// Modulo operations
-modulo(17, 5); // → 2 (remainder when 17 is divided by 5)
-remainder(17, 5); // → 2 (IEEE 754 remainder operation)
-modulo(100, 7); // → 2 (checking divisibility)
-modulo(123, 10); // → 3 (extracting last digit)
-
-// Statistical analysis
-mean([85, 92, 78, 96, 88]); // → 87.8
-standardDeviation([10, 12, 14, 16, 18]); // → 2.83
-percentile([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 75); // → 7.75
-
-// Data science operations
-normalizeArray([10, 20, 30, 40, 50]); // → [0, 0.25, 0.5, 0.75, 1]
-correlation([1, 2, 3, 4, 5], [2, 4, 6, 8, 10]); // → 1 (perfect positive correlation)
-```
-
 ## 🔧 Tool Reference
 
 ### Basic Arithmetic
 
-| Tool       | Parameters                    | Description                        |
-| ---------- | ----------------------------- | ---------------------------------- |
-| `add`      | `firstNumber`, `secondNumber` | Addition of two numbers            |
-| `subtract` | `minuend`, `subtrahend`       | Subtraction (minuend - subtrahend) |
-| `multiply` | `firstNumber`, `secondNumber` | Multiplication of two numbers      |
-| `division` | `numerator`, `denominator`    | Division with zero-check           |
-| `sum`      | `numbers[]`                   | Sum all numbers in array           |
-| `modulo`   | `dividend`, `divisor`         | Modulo operation (dividend % divisor) |
-| `remainder`| `dividend`, `divisor`         | IEEE 754 remainder operation       |
-| `power`    | `base`, `exponent`            | Exponentiation (base^exponent)     |
-| `sqrt`     | `number`                      | Square root calculation            |
-| `abs`      | `number`                      | Absolute value                     |
+| Tool        | Parameters                    | Description                           |
+| ----------- | ----------------------------- | ------------------------------------- |
+| `add`       | `firstNumber`, `secondNumber` | Addition of two numbers               |
+| `subtract`  | `minuend`, `subtrahend`       | Subtraction (minuend - subtrahend)    |
+| `multiply`  | `firstNumber`, `secondNumber` | Multiplication of two numbers         |
+| `division`  | `numerator`, `denominator`    | Division with zero-check              |
+| `sum`       | `numbers[]`                   | Sum all numbers in array              |
+| `modulo`    | `dividend`, `divisor`         | Modulo operation (dividend % divisor) |
+| `remainder` | `dividend`, `divisor`         | IEEE 754 remainder operation          |
+| `power`     | `base`, `exponent`            | Exponentiation (base^exponent)        |
+| `sqrt`      | `number`                      | Square root calculation               |
+| `abs`       | `number`                      | Absolute value                        |
 
 ### Advanced Mathematics
 
@@ -192,6 +139,59 @@ correlation([1, 2, 3, 4, 5], [2, 4, 6, 8, 10]); // → 1 (perfect positive corre
 - **Functions**: All 33+ mathematical tools listed above
 - **Arrays**: `[1,2,3,4,5]` notation for statistical functions
 - **Parentheses**: Full support for grouping and precedence
+
+## 💡 Usage Examples
+
+### Expression Evaluator
+
+The `evaluate` tool is the most powerful feature, allowing complex mathematical expressions:
+
+```javascript
+// Financial calculations
+evaluate('(1 + 0.05)^10 * 10000'); // → Compound interest: $16,288.95
+
+// Statistics with embedded calculations
+evaluate('mean([1,2,3,4,5]) + variance([10,20,30,40,50])'); // → Mean + variance
+
+// Advanced mathematical operations
+evaluate('factorial(5) + gcd(48, 18) * sqrt(16)'); // → 120 + 6 * 4 = 144
+
+// Machine learning preprocessing
+evaluate('correlation([1,2,3,4], [2,4,6,8]) * 100'); // → Perfect correlation: 100
+
+// Complex statistical analysis
+evaluate('zscore(85, mean([70,75,80,85,90]), standardDeviation([70,75,80,85,90]))');
+
+// Modulo operations in expressions
+evaluate('17 % 5 + power(2, 3)'); // → 2 + 8 = 10
+evaluate('(100 % 7) * factorial(3)'); // → 2 * 6 = 12
+```
+
+### Individual Tool Usage
+
+Each mathematical operation is also available as a standalone tool:
+
+```javascript
+// Basic arithmetic
+add(15, 27); // → 42
+multiply(6, 7); // → 42
+power(2, 10); // → 1024
+
+// Modulo operations
+modulo(17, 5); // → 2 (remainder when 17 is divided by 5)
+remainder(17, 5); // → 2 (IEEE 754 remainder operation)
+modulo(100, 7); // → 2 (checking divisibility)
+modulo(123, 10); // → 3 (extracting last digit)
+
+// Statistical analysis
+mean([85, 92, 78, 96, 88]); // → 87.8
+standardDeviation([10, 12, 14, 16, 18]); // → 2.83
+percentile([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 75); // → 7.75
+
+// Data science operations
+normalizeArray([10, 20, 30, 40, 50]); // → [0, 0.25, 0.5, 0.75, 1]
+correlation([1, 2, 3, 4, 5], [2, 4, 6, 8, 10]); // → 1 (perfect positive correlation)
+```
 
 ## 🎯 Real-World Applications
 
