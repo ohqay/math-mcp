@@ -20,7 +20,7 @@ export class Statistics {
      */
     static median(numbers: number[]) {
         //Sort numbers
-        numbers.sort()
+        numbers.sort((a, b) => a - b)
 
         //Find the median index
         const medianIndex = numbers.length / 2
@@ -33,12 +33,14 @@ export class Statistics {
             //If number is even
             medianValue = (numbers[medianIndex] + numbers[medianIndex - 1]) / 2
         }
+
+        return medianValue
     }
 
     /**
      * Calculate the mode (most frequent value(s)) of an array of numbers
      * @param numbers - Array of numbers to calculate the mode of
-     * @returns Object containing the mode value(s) and their frequency
+     * @returns The mode value(s) - a single number if one mode, or an array if multiple modes
      */
     static mode(numbers: number[]) {
         const modeMap = new Map<number, number>()
@@ -68,10 +70,8 @@ export class Statistics {
             }
         }
 
-        return {
-            modeResult: modeResult,
-            maxFrequency: maxFrequency
-        }
+        // Return single value if only one mode, otherwise return array
+        return modeResult.length === 1 ? modeResult[0] : modeResult;
     }
 
     /**
