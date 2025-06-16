@@ -170,6 +170,67 @@ mathServer.tool("max", "Finds the maximum value from a list of numbers", {
     };
 });
 /**
+ * Variance operation
+ * Calculates the population variance of an array of numbers
+ */
+mathServer.tool("variance", "Calculates the population variance of a list of numbers", {
+    numbers: z.array(z.number()).min(1).describe("Array of numbers to calculate the variance of")
+}, async ({ numbers }) => {
+    const value = Statistics.variance(numbers);
+    return {
+        content: [{
+                type: "text",
+                text: `${value}`
+            }]
+    };
+});
+/**
+ * Standard deviation operation
+ * Calculates the standard deviation of an array of numbers
+ */
+mathServer.tool("standardDeviation", "Calculates the standard deviation of a list of numbers", {
+    numbers: z.array(z.number()).min(1).describe("Array of numbers to calculate the standard deviation of")
+}, async ({ numbers }) => {
+    const value = Statistics.standardDeviation(numbers);
+    return {
+        content: [{
+                type: "text",
+                text: `${value}`
+            }]
+    };
+});
+/**
+ * Range operation
+ * Calculates the range (max - min) of an array of numbers
+ */
+mathServer.tool("range", "Calculates the range (difference between max and min) of a list of numbers", {
+    numbers: z.array(z.number()).min(1).describe("Array of numbers to calculate the range of")
+}, async ({ numbers }) => {
+    const value = Statistics.range(numbers);
+    return {
+        content: [{
+                type: "text",
+                text: `${value}`
+            }]
+    };
+});
+/**
+ * Percentile operation
+ * Calculates the percentile value of an array of numbers
+ */
+mathServer.tool("percentile", "Calculates the percentile value of a list of numbers", {
+    numbers: z.array(z.number()).min(1).describe("Array of numbers to calculate the percentile from"),
+    p: z.number().min(0).max(100).describe("The percentile to calculate (0-100)")
+}, async ({ numbers, p }) => {
+    const value = Statistics.percentile(numbers, p);
+    return {
+        content: [{
+                type: "text",
+                text: `${value}`
+            }]
+    };
+});
+/**
  * Floor operation
  * Rounds a number down to the nearest integer
  */
@@ -207,6 +268,147 @@ mathServer.tool("round", "Rounds a number to the nearest integer", {
     number: z.number().describe("The number to round"),
 }, async ({ number }) => {
     const value = Arithmetic.round(number);
+    return {
+        content: [{
+                type: "text",
+                text: `${value}`
+            }]
+    };
+});
+/**
+ * Round to precision operation
+ * Rounds a number to a specified number of decimal places
+ */
+mathServer.tool("roundToPrecision", "Rounds a number to a specified number of decimal places", {
+    number: z.number().describe("The number to round"),
+    decimalPlaces: z.number().int().min(0).max(15).describe("The number of decimal places to round to (0-15)")
+}, async ({ number, decimalPlaces }) => {
+    const value = Arithmetic.roundToPrecision(number, decimalPlaces);
+    return {
+        content: [{
+                type: "text",
+                text: `${value}`
+            }]
+    };
+});
+/**
+ * Floor to precision operation
+ * Floors a number to a specified number of decimal places
+ */
+mathServer.tool("floorToPrecision", "Floors a number to a specified number of decimal places", {
+    number: z.number().describe("The number to floor"),
+    decimalPlaces: z.number().int().min(0).max(15).describe("The number of decimal places to floor to (0-15)")
+}, async ({ number, decimalPlaces }) => {
+    const value = Arithmetic.floorToPrecision(number, decimalPlaces);
+    return {
+        content: [{
+                type: "text",
+                text: `${value}`
+            }]
+    };
+});
+/**
+ * Ceil to precision operation
+ * Ceils a number to a specified number of decimal places
+ */
+mathServer.tool("ceilToPrecision", "Ceils a number to a specified number of decimal places", {
+    number: z.number().describe("The number to ceil"),
+    decimalPlaces: z.number().int().min(0).max(15).describe("The number of decimal places to ceil to (0-15)")
+}, async ({ number, decimalPlaces }) => {
+    const value = Arithmetic.ceilToPrecision(number, decimalPlaces);
+    return {
+        content: [{
+                type: "text",
+                text: `${value}`
+            }]
+    };
+});
+/**
+ * Power operation
+ * Raises a base number to the power of an exponent
+ */
+mathServer.tool("power", "Raises a base number to the power of an exponent", {
+    base: z.number().describe("The base number"),
+    exponent: z.number().describe("The exponent to raise the base to")
+}, async ({ base, exponent }) => {
+    const value = Arithmetic.power(base, exponent);
+    return {
+        content: [{
+                type: "text",
+                text: `${value}`
+            }]
+    };
+});
+/**
+ * Square root operation
+ * Calculates the square root of a number
+ */
+mathServer.tool("sqrt", "Calculates the square root of a number", {
+    number: z.number().min(0).describe("The number to find the square root of (must be non-negative)")
+}, async ({ number }) => {
+    const value = Arithmetic.sqrt(number);
+    return {
+        content: [{
+                type: "text",
+                text: `${value}`
+            }]
+    };
+});
+/**
+ * Absolute value operation
+ * Calculates the absolute value of a number
+ */
+mathServer.tool("abs", "Calculates the absolute value of a number", {
+    number: z.number().describe("The number to find the absolute value of")
+}, async ({ number }) => {
+    const value = Arithmetic.abs(number);
+    return {
+        content: [{
+                type: "text",
+                text: `${value}`
+            }]
+    };
+});
+/**
+ * GCD operation
+ * Calculates the greatest common divisor of two integers using Euclidean algorithm
+ */
+mathServer.tool("gcd", "Calculates the greatest common divisor (GCD) of two integers", {
+    a: z.number().int().describe("The first integer"),
+    b: z.number().int().describe("The second integer")
+}, async ({ a, b }) => {
+    const value = Arithmetic.gcd(a, b);
+    return {
+        content: [{
+                type: "text",
+                text: `${value}`
+            }]
+    };
+});
+/**
+ * LCM operation
+ * Calculates the least common multiple of two integers
+ */
+mathServer.tool("lcm", "Calculates the least common multiple (LCM) of two integers", {
+    a: z.number().int().describe("The first integer"),
+    b: z.number().int().describe("The second integer")
+}, async ({ a, b }) => {
+    const value = Arithmetic.lcm(a, b);
+    return {
+        content: [{
+                type: "text",
+                text: `${value}`
+            }]
+    };
+});
+/**
+ * Factorial operation
+ * Calculates the factorial of a non-negative integer
+ */
+mathServer.tool("factorial", "Calculates the factorial of a non-negative integer", {
+    n: z.number().int().min(0).describe("The non-negative integer to calculate factorial of")
+}, async ({ n }) => {
+    const value = Arithmetic.factorial(n);
     return {
         content: [{
                 type: "text",
