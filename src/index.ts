@@ -24,9 +24,9 @@ const mathServer = new McpServer({
  * Addition operation
  * Adds two numbers and returns their sum
  */
-mathServer.tool("add", "Adds two numbers together", {
-    firstNumber: z.number().describe("The first addend"),
-    secondNumber: z.number().describe("The second addend")
+mathServer.tool("add", "Performs addition of two numbers using standard arithmetic. Returns the sum of the first and second number.", {
+    firstNumber: z.number().describe("The first addend (number to be added)"),
+    secondNumber: z.number().describe("The second addend (number to be added)")
 }, async ({ firstNumber, secondNumber }) => {
     try {
         const value = Arithmetic.add(firstNumber, secondNumber)
@@ -51,7 +51,7 @@ mathServer.tool("add", "Adds two numbers together", {
  * Subtraction operation
  * Subtracts the second number from the first number
  */
-mathServer.tool("subtract", "Subtracts the second number from the first number", {
+mathServer.tool("subtract", "Performs subtraction by removing the second number from the first number. Returns the difference (minuend - subtrahend).", {
     minuend: z.number().describe("The number to subtract from (minuend)"),
     subtrahend: z.number().describe("The number being subtracted (subtrahend)")
 }, async ({ minuend, subtrahend }) => {
@@ -78,9 +78,9 @@ mathServer.tool("subtract", "Subtracts the second number from the first number",
  * Multiplication operation
  * Multiplies two numbers together
  */
-mathServer.tool("multiply", "Multiplies two numbers together", {
-    firstNumber: z.number().describe("The first number"),
-    secondNumber: z.number().describe("The second number")
+mathServer.tool("multiply", "Performs multiplication of two numbers using standard arithmetic. Returns the product of the first and second number.", {
+    firstNumber: z.number().describe("The first multiplicand (number to be multiplied)"),
+    secondNumber: z.number().describe("The second multiplicand (number to be multiplied)")
 }, async ({ firstNumber, secondNumber }) => {
     try {
         const value = Arithmetic.multiply(firstNumber, secondNumber)
@@ -105,9 +105,9 @@ mathServer.tool("multiply", "Multiplies two numbers together", {
  * Division operation
  * Divides the first number by the second number
  */
-mathServer.tool("division", "Divides the first number by the second number", {
+mathServer.tool("division", "Performs division by dividing the first number by the second number. Returns the quotient (numerator ÷ denominator). Handles division by zero with appropriate error.", {
     numerator: z.number().describe("The number being divided (numerator)"),
-    denominator: z.number().describe("The number to divide by (denominator)")
+    denominator: z.number().describe("The number to divide by (denominator, must not be zero)")
 }, async ({ numerator, denominator }) => {
     try {
         const value = Arithmetic.division(numerator, denominator)
@@ -132,8 +132,8 @@ mathServer.tool("division", "Divides the first number by the second number", {
  * Sum operation
  * Calculates the sum of an array of numbers
  */
-mathServer.tool("sum", "Adds any number of numbers together", {
-    numbers: z.array(z.number()).min(1).describe("Array of numbers to sum")
+mathServer.tool("sum", "Calculates the sum of multiple numbers by adding all values in the array. Returns the total sum of all elements.", {
+    numbers: z.array(z.number()).min(1).describe("Array of numbers to sum (must contain at least 1 element)")
 }, async ({ numbers }) => {
     try {
         const value = Arithmetic.sum(numbers)
@@ -157,8 +157,8 @@ mathServer.tool("sum", "Adds any number of numbers together", {
  * Mean operation
  * Calculates the arithmetic mean of an array of numbers
  */
-mathServer.tool("mean", "Calculates the arithmetic mean of a list of numbers", {
-    numbers: z.array(z.number()).min(1).describe("Array of numbers to find the mean of")
+mathServer.tool("mean", "Calculates the arithmetic mean (average) of a dataset by summing all values and dividing by the count. Formula: (sum of all values) / (number of values).", {
+    numbers: z.array(z.number()).min(1).describe("Array of numbers to calculate the mean of (must contain at least 1 element)")
 }, async ({ numbers }) => {
     try {
         const value = Statistics.mean(numbers)
@@ -183,8 +183,8 @@ mathServer.tool("mean", "Calculates the arithmetic mean of a list of numbers", {
  * Median operation
  * Calculates the median of an array of numbers
  */
-mathServer.tool("median", "Calculates the median of a list of numbers", {
-    numbers: z.array(z.number()).min(1).describe("Array of numbers to find the median of")
+mathServer.tool("median", "Calculates the median (middle value) of a dataset. For odd-length arrays, returns the middle value. For even-length arrays, returns the average of the two middle values.", {
+    numbers: z.array(z.number()).min(1).describe("Array of numbers to calculate the median of (must contain at least 1 element)")
 }, async ({ numbers }) => {
     try {
         const value = Statistics.median(numbers)
@@ -209,8 +209,8 @@ mathServer.tool("median", "Calculates the median of a list of numbers", {
  * Mode operation
  * Finds the most common number in an array of numbers
  */
-mathServer.tool("mode", "Finds the most common number in a list of numbers", {
-    numbers: z.array(z.number()).describe("Array of numbers to find the mode of")
+mathServer.tool("mode", "Finds the most frequently occurring value(s) in a dataset. Returns a single number if one mode exists, or an array of numbers if multiple values tie for highest frequency.", {
+    numbers: z.array(z.number()).min(1).describe("Array of numbers to find the mode of (must contain at least 1 element)")
 }, async ({ numbers }) => {
     try {
         const value = Statistics.mode(numbers)
@@ -235,8 +235,8 @@ mathServer.tool("mode", "Finds the most common number in a list of numbers", {
  * Minimum operation
  * Finds the smallest number in an array
  */
-mathServer.tool("min", "Finds the minimum value from a list of numbers", {
-    numbers: z.array(z.number()).describe("Array of numbers to find the minimum of")
+mathServer.tool("min", "Finds the smallest value in a dataset. Efficiently determines the minimum value without sorting the entire array.", {
+    numbers: z.array(z.number()).min(1).describe("Array of numbers to find the minimum of (must contain at least 1 element)")
 }, async ({ numbers }) => {
     try {
         const value = Statistics.min(numbers)
@@ -261,8 +261,8 @@ mathServer.tool("min", "Finds the minimum value from a list of numbers", {
  * Maximum operation
  * Finds the largest number in an array
  */
-mathServer.tool("max", "Finds the maximum value from a list of numbers", {
-    numbers: z.array(z.number()).describe("Array of numbers to find the maximum of")
+mathServer.tool("max", "Finds the largest value in a dataset. Efficiently determines the maximum value without sorting the entire array.", {
+    numbers: z.array(z.number()).min(1).describe("Array of numbers to find the maximum of (must contain at least 1 element)")
 }, async ({ numbers }) => {
     try {
         const value = Statistics.max(numbers)
@@ -288,7 +288,7 @@ mathServer.tool("max", "Finds the maximum value from a list of numbers", {
  * Calculates the population variance of an array of numbers
  */
 mathServer.tool("variance", "Calculates the population variance of a list of numbers", {
-    numbers: z.array(z.number()).min(1).describe("Array of numbers to calculate the variance of")
+    numbers: z.array(z.number()).describe("Array of numbers to calculate the variance of")
 }, async ({ numbers }) => {
     try {
         const value = Statistics.variance(numbers)
@@ -314,7 +314,7 @@ mathServer.tool("variance", "Calculates the population variance of a list of num
  * Calculates the standard deviation of an array of numbers
  */
 mathServer.tool("standardDeviation", "Calculates the standard deviation of a list of numbers", {
-    numbers: z.array(z.number()).min(1).describe("Array of numbers to calculate the standard deviation of")
+    numbers: z.array(z.number()).describe("Array of numbers to calculate the standard deviation of")
 }, async ({ numbers }) => {
     try {
         const value = Statistics.standardDeviation(numbers)
@@ -340,7 +340,7 @@ mathServer.tool("standardDeviation", "Calculates the standard deviation of a lis
  * Calculates the range (max - min) of an array of numbers
  */
 mathServer.tool("range", "Calculates the range (difference between max and min) of a list of numbers", {
-    numbers: z.array(z.number()).min(1).describe("Array of numbers to calculate the range of")
+    numbers: z.array(z.number()).describe("Array of numbers to calculate the range of")
 }, async ({ numbers }) => {
     try {
         const value = Statistics.range(numbers)
@@ -366,7 +366,7 @@ mathServer.tool("range", "Calculates the range (difference between max and min) 
  * Calculates the percentile value of an array of numbers
  */
 mathServer.tool("percentile", "Calculates the percentile value of a list of numbers", {
-    numbers: z.array(z.number()).min(1).describe("Array of numbers to calculate the percentile from"),
+    numbers: z.array(z.number()).describe("Array of numbers to calculate the percentile from"),
     p: z.number().describe("The percentile to calculate (0-100)")
 }, async ({ numbers, p }) => {
     try {
@@ -733,8 +733,8 @@ mathServer.tool("evaluate", "Evaluates a mathematical expression string with sup
  * Calculates the Pearson correlation coefficient between two arrays of numbers
  */
 mathServer.tool("correlation", "Calculates the Pearson correlation coefficient between two arrays of numbers", {
-    xArray: z.array(z.number()).min(2).describe("The first array of numbers (must have at least 2 elements)"),
-    yArray: z.array(z.number()).min(2).describe("The second array of numbers (must have at least 2 elements and same length as xArray)")
+    xArray: z.array(z.number()).describe("The first array of numbers"),
+    yArray: z.array(z.number()).describe("The second array of numbers")
 }, async ({ xArray, yArray }) => {
     try {
         const value = Statistics.correlation(xArray, yArray)
@@ -760,8 +760,8 @@ mathServer.tool("correlation", "Calculates the Pearson correlation coefficient b
  * Calculates the sample covariance between two arrays of numbers
  */
 mathServer.tool("covariance", "Calculates the sample covariance between two arrays of numbers", {
-    xArray: z.array(z.number()).min(2).describe("The first array of numbers (must have at least 2 elements)"),
-    yArray: z.array(z.number()).min(2).describe("The second array of numbers (must have at least 2 elements and same length as xArray)")
+    xArray: z.array(z.number()).describe("The first array of numbers"),
+    yArray: z.array(z.number()).describe("The second array of numbers")
 }, async ({ xArray, yArray }) => {
     try {
         const value = Statistics.covariance(xArray, yArray)
@@ -815,7 +815,7 @@ mathServer.tool("zscore", "Calculates the z-score (standard score) for a given v
  * Normalizes an array of numbers using min-max normalization (0-1 scale)
  */
 mathServer.tool("normalizeArray", "Normalizes an array of numbers using min-max normalization (0-1 scale)", {
-    numbers: z.array(z.number()).min(1).describe("Array of numbers to normalize")
+    numbers: z.array(z.number()).describe("Array of numbers to normalize")
 }, async ({ numbers }) => {
     try {
         const normalizedArray = DataScience.normalizeArray(numbers)
@@ -841,7 +841,7 @@ mathServer.tool("normalizeArray", "Normalizes an array of numbers using min-max 
  * Standardizes an array of numbers using z-score standardization (mean=0, std=1)
  */
 mathServer.tool("standardizeArray", "Standardizes an array of numbers using z-score standardization (mean=0, std=1)", {
-    numbers: z.array(z.number()).min(2).describe("Array of numbers to standardize (must have at least 2 elements)")
+    numbers: z.array(z.number()).describe("Array of numbers to standardize")
 }, async ({ numbers }) => {
     try {
         const standardizedArray = DataScience.standardizeArray(numbers)
