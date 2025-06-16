@@ -53,9 +53,9 @@ mathServer.tool("subtract", "Subtracts the second number from the first number",
  */
 mathServer.tool("multiply", "Multiplies two numbers together", {
     firstNumber: z.number().describe("The first number"),
-    SecondNumber: z.number().describe("The second number")
-}, async ({ firstNumber, SecondNumber }) => {
-    const value = Arithmetic.multiply(firstNumber, SecondNumber);
+    secondNumber: z.number().describe("The second number")
+}, async ({ firstNumber, secondNumber }) => {
+    const value = Arithmetic.multiply(firstNumber, secondNumber);
     return {
         content: [{
                 type: "text",
@@ -135,7 +135,7 @@ mathServer.tool("mode", "Finds the most common number in a list of numbers", {
     return {
         content: [{
                 type: "text",
-                text: `Entries (${value.modeResult.join(', ')}) appeared ${value.maxFrequency} times`
+                text: `${Array.isArray(value) ? value.join(', ') : value}`
             }]
     };
 });
