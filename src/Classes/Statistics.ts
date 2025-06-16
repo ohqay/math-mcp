@@ -227,4 +227,111 @@ export class Statistics {
         return percentileValue;
     }
 
+    /**
+     * Calculate the Pearson correlation coefficient between two arrays of numbers
+     * @param xArray - The first array of numbers
+     * @param yArray - The second array of numbers
+     * @returns The Pearson correlation coefficient (-1 to 1)
+     * @throws Error if arrays are empty, contain invalid numbers, or have different lengths
+     */
+    static correlation(xArray: number[], yArray: number[]): number {
+        this.validateNumberArray(xArray, 'xArray');
+        this.validateNumberArray(yArray, 'yArray');
+        
+        if (xArray.length !== yArray.length) {
+            throw new Error(`Arrays must have the same length. xArray has ${xArray.length} elements, yArray has ${yArray.length} elements`);
+        }
+        
+        if (xArray.length < 2) {
+            throw new Error('Arrays must have at least 2 elements for correlation calculation');
+        }
+        
+        const n = xArray.length;
+        const meanX = this.mean(xArray);
+        const meanY = this.mean(yArray);
+        
+        let numerator = 0;
+        let sumXSquares = 0;
+        let sumYSquares = 0;
+        
+        for (let i = 0; i < n; i++) {
+            const xDiff = xArray[i] - meanX;
+            const yDiff = yArray[i] - meanY;
+            
+            numerator += xDiff * yDiff;
+            sumXSquares += xDiff * xDiff;
+            sumYSquares += yDiff * yDiff;
+        }
+        
+        const denominator = Math.sqrt(sumXSquares * sumYSquares);
+        
+        // Handle case where one variable has no variance
+        if (denominator === 0) {
+            return 0;
+        }
+        
+        return numerator / denominator;
+    }
+
+    /**
+     * Calculate the sample covariance between two arrays of numbers
+     * @param xArray - The first array of numbers
+     * @param yArray - The second array of numbers
+     * @returns The sample covariance
+     * @throws Error if arrays are empty, contain invalid numbers, or have different lengths
+     */
+    static covariance(xArray: number[], yArray: number[]): number {
+        this.validateNumberArray(xArray, 'xArray');
+        this.validateNumberArray(yArray, 'yArray');
+        
+        if (xArray.length !== yArray.length) {
+            throw new Error(`Arrays must have the same length. xArray has ${xArray.length} elements, yArray has ${yArray.length} elements`);
+        }
+        
+        if (xArray.length < 2) {
+            throw new Error('Arrays must have at least 2 elements for covariance calculation');
+        }
+        
+        const n = xArray.length;
+        const meanX = this.mean(xArray);
+        const meanY = this.mean(yArray);
+        
+        let sumProducts = 0;
+        
+        for (let i = 0; i < n; i++) {
+            sumProducts += (xArray[i] - meanX) * (yArray[i] - meanY);
+        }
+        
+        // Use n-1 for sample covariance (Bessel's correction)
+        return sumProducts / (n - 1);
+    }
+
+    /**
+     * Calculate the z-score (standard score) for a given value
+     * @param value - The value to calculate the z-score for
+     * @param mean - The mean of the distribution
+     * @param stdDev - The standard deviation of the distribution
+     * @returns The z-score
+     * @throws Error if any parameter is invalid or standard deviation is zero
+     */
+    static zscore(value: number, mean: number, stdDev: number): number {
+        if (typeof value !== 'number' || isNaN(value) || !isFinite(value)) {
+            throw new Error('value must be a valid finite number');
+        }
+        if (typeof mean !== 'number' || isNaN(mean) || !isFinite(mean)) {
+            throw new Error('mean must be a valid finite number');
+        }
+        if (typeof stdDev !== 'number' || isNaN(stdDev) || !isFinite(stdDev)) {
+            throw new Error('stdDev must be a valid finite number');
+        }
+        if (stdDev === 0) {
+            throw new Error('Standard deviation cannot be zero');
+        }
+        if (stdDev < 0) {
+            throw new Error('Standard deviation must be positive');
+        }
+        
+        return (value - mean) / stdDev;
+    }
+
 }

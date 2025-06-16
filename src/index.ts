@@ -12,6 +12,7 @@ import { z } from "zod";
 import { Arithmetic } from "./Classes/Arithmetic.js";
 import { Statistics } from "./Classes/Statistics.js";
 import { ExpressionEvaluator } from "./Classes/ExpressionEvaluator.js";
+import { DataScience } from "./Classes/DataScience.js";
 
 // Initialize the MCP server with name and version
 const mathServer = new McpServer({
@@ -524,12 +525,21 @@ mathServer.tool("ceilToPrecision", "Ceils a number to a specified number of deci
     number: z.number().describe("The number to ceil"),
     decimalPlaces: z.number().int().min(0).max(15).describe("The number of decimal places to ceil to (0-15)")
 }, async ({ number, decimalPlaces }) => {
-    const value = Arithmetic.ceilToPrecision(number, decimalPlaces)
-    return {
-        content: [{
-            type: "text",
-            text: `${value}`
-        }]
+    try {
+        const value = Arithmetic.ceilToPrecision(number, decimalPlaces)
+        return {
+            content: [{
+                type: "text",
+                text: `${value}`
+            }]
+        }
+    } catch (error) {
+        return {
+            content: [{
+                type: "text",
+                text: `Error: ${error instanceof Error ? error.message : 'An unexpected error occurred during precision ceiling operation.'}`
+            }]
+        }
     }
 })
 
@@ -541,12 +551,21 @@ mathServer.tool("power", "Raises a base number to the power of an exponent", {
     base: z.number().describe("The base number"),
     exponent: z.number().describe("The exponent to raise the base to")
 }, async ({ base, exponent }) => {
-    const value = Arithmetic.power(base, exponent)
-    return {
-        content: [{
-            type: "text",
-            text: `${value}`
-        }]
+    try {
+        const value = Arithmetic.power(base, exponent)
+        return {
+            content: [{
+                type: "text",
+                text: `${value}`
+            }]
+        }
+    } catch (error) {
+        return {
+            content: [{
+                type: "text",
+                text: `Error: ${error instanceof Error ? error.message : 'An unexpected error occurred during power operation.'}`
+            }]
+        }
     }
 })
 
@@ -557,12 +576,21 @@ mathServer.tool("power", "Raises a base number to the power of an exponent", {
 mathServer.tool("sqrt", "Calculates the square root of a number", {
     number: z.number().min(0).describe("The number to find the square root of (must be non-negative)")
 }, async ({ number }) => {
-    const value = Arithmetic.sqrt(number)
-    return {
-        content: [{
-            type: "text",
-            text: `${value}`
-        }]
+    try {
+        const value = Arithmetic.sqrt(number)
+        return {
+            content: [{
+                type: "text",
+                text: `${value}`
+            }]
+        }
+    } catch (error) {
+        return {
+            content: [{
+                type: "text",
+                text: `Error: ${error instanceof Error ? error.message : 'An unexpected error occurred during square root calculation.'}`
+            }]
+        }
     }
 })
 
@@ -573,12 +601,21 @@ mathServer.tool("sqrt", "Calculates the square root of a number", {
 mathServer.tool("abs", "Calculates the absolute value of a number", {
     number: z.number().describe("The number to find the absolute value of")
 }, async ({ number }) => {
-    const value = Arithmetic.abs(number)
-    return {
-        content: [{
-            type: "text",
-            text: `${value}`
-        }]
+    try {
+        const value = Arithmetic.abs(number)
+        return {
+            content: [{
+                type: "text",
+                text: `${value}`
+            }]
+        }
+    } catch (error) {
+        return {
+            content: [{
+                type: "text",
+                text: `Error: ${error instanceof Error ? error.message : 'An unexpected error occurred during absolute value calculation.'}`
+            }]
+        }
     }
 })
 
@@ -590,13 +627,22 @@ mathServer.tool("gcd", "Calculates the greatest common divisor (GCD) of two inte
     a: z.number().int().describe("The first integer"),
     b: z.number().int().describe("The second integer")
 }, async ({ a, b }) => {
-    const value = Arithmetic.gcd(a, b)
+    try {
+        const value = Arithmetic.gcd(a, b)
 
-    return {
-        content: [{
-            type: "text",
-            text: `${value}`
-        }]
+        return {
+            content: [{
+                type: "text",
+                text: `${value}`
+            }]
+        }
+    } catch (error) {
+        return {
+            content: [{
+                type: "text",
+                text: `Error: ${error instanceof Error ? error.message : 'An unexpected error occurred during GCD calculation.'}`
+            }]
+        }
     }
 })
 
@@ -608,13 +654,22 @@ mathServer.tool("lcm", "Calculates the least common multiple (LCM) of two intege
     a: z.number().int().describe("The first integer"),
     b: z.number().int().describe("The second integer")
 }, async ({ a, b }) => {
-    const value = Arithmetic.lcm(a, b)
+    try {
+        const value = Arithmetic.lcm(a, b)
 
-    return {
-        content: [{
-            type: "text",
-            text: `${value}`
-        }]
+        return {
+            content: [{
+                type: "text",
+                text: `${value}`
+            }]
+        }
+    } catch (error) {
+        return {
+            content: [{
+                type: "text",
+                text: `Error: ${error instanceof Error ? error.message : 'An unexpected error occurred during LCM calculation.'}`
+            }]
+        }
     }
 })
 
@@ -625,13 +680,22 @@ mathServer.tool("lcm", "Calculates the least common multiple (LCM) of two intege
 mathServer.tool("factorial", "Calculates the factorial of a non-negative integer", {
     n: z.number().int().min(0).describe("The non-negative integer to calculate factorial of")
 }, async ({ n }) => {
-    const value = Arithmetic.factorial(n)
+    try {
+        const value = Arithmetic.factorial(n)
 
-    return {
-        content: [{
-            type: "text",
-            text: `${value}`
-        }]
+        return {
+            content: [{
+                type: "text",
+                text: `${value}`
+            }]
+        }
+    } catch (error) {
+        return {
+            content: [{
+                type: "text",
+                text: `Error: ${error instanceof Error ? error.message : 'An unexpected error occurred during factorial calculation.'}`
+            }]
+        }
     }
 })
 
