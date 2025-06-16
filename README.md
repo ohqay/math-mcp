@@ -9,7 +9,7 @@
 ╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝       ╚═╝    ╚═════╝  ╚═════╝ ╚══════╝╚══════╝
 ```
 
-A comprehensive Model Context Protocol (MCP) server that provides LLMs with **32+ mathematical tools** and a powerful **expression evaluator**. Transform your AI assistant into a mathematical computation powerhouse with support for everything from basic arithmetic to advanced statistical analysis and data science operations.
+A comprehensive Model Context Protocol (MCP) server that provides LLMs with **34+ mathematical tools** and a powerful **expression evaluator**. Transform your AI assistant into a mathematical computation powerhouse with support for everything from basic arithmetic to advanced statistical analysis and data science operations.
 
 ## 🚀 Features
 
@@ -18,16 +18,18 @@ A comprehensive Model Context Protocol (MCP) server that provides LLMs with **32
 - **Complex Mathematical Expressions**: Evaluate sophisticated mathematical expressions in a single call
 - **Function Composition**: Chain mathematical functions together seamlessly
 - **Array Support**: Use array notation `[1,2,3,4,5]` directly in expressions
-- **Operator Support**: Full support for `+`, `-`, `*`, `/`, `^` (power) operators
+- **Operator Support**: Full support for `+`, `-`, `*`, `/`, `^` (power), `%` (modulo) operators
 - **Constants**: Built-in mathematical constants (`pi`, `e`)
 - **Precedence Handling**: Proper mathematical operator precedence and parentheses support
 
-### **Basic Arithmetic (8 tools)**
+### **Basic Arithmetic (10 tools)**
 
 - `add` - Addition of two numbers
 - `subtract` - Subtraction with proper minuend/subtrahend handling
 - `multiply` - Multiplication of two numbers
 - `division` - Division with zero-division error handling
+- `modulo` - Modulo operation (dividend % divisor)
+- `remainder` - IEEE 754 remainder operation
 - `sum` - Sum multiple numbers from an array
 - `power` - Exponentiation (base^exponent)
 - `sqrt` - Square root calculation
@@ -132,6 +134,10 @@ evaluate('correlation([1,2,3,4], [2,4,6,8]) * 100'); // → Perfect correlation:
 
 // Complex statistical analysis
 evaluate('zscore(85, mean([70,75,80,85,90]), standardDeviation([70,75,80,85,90]))');
+
+// Modulo operations in expressions
+evaluate('17 % 5 + power(2, 3)'); // → 2 + 8 = 10
+evaluate('(100 % 7) * factorial(3)'); // → 2 * 6 = 12
 ```
 
 ### Individual Tool Usage
@@ -143,6 +149,12 @@ Each mathematical operation is also available as a standalone tool:
 add(15, 27); // → 42
 multiply(6, 7); // → 42
 power(2, 10); // → 1024
+
+// Modulo operations
+modulo(17, 5); // → 2 (remainder when 17 is divided by 5)
+remainder(17, 5); // → 2 (IEEE 754 remainder operation)
+modulo(100, 7); // → 2 (checking divisibility)
+modulo(123, 10); // → 3 (extracting last digit)
 
 // Statistical analysis
 mean([85, 92, 78, 96, 88]); // → 87.8
@@ -165,6 +177,8 @@ correlation([1, 2, 3, 4, 5], [2, 4, 6, 8, 10]); // → 1 (perfect positive corre
 | `multiply` | `firstNumber`, `secondNumber` | Multiplication of two numbers      |
 | `division` | `numerator`, `denominator`    | Division with zero-check           |
 | `sum`      | `numbers[]`                   | Sum all numbers in array           |
+| `modulo`   | `dividend`, `divisor`         | Modulo operation (dividend % divisor) |
+| `remainder`| `dividend`, `divisor`         | IEEE 754 remainder operation       |
 | `power`    | `base`, `exponent`            | Exponentiation (base^exponent)     |
 | `sqrt`     | `number`                      | Square root calculation            |
 | `abs`      | `number`                      | Absolute value                     |
@@ -220,9 +234,9 @@ correlation([1, 2, 3, 4, 5], [2, 4, 6, 8, 10]); // → 1 (perfect positive corre
 
 **Supported in expressions:**
 
-- **Operators**: `+`, `-`, `*`, `/`, `^` (power)
+- **Operators**: `+`, `-`, `*`, `/`, `^` (power), `%` (modulo)
 - **Constants**: `pi`, `e`
-- **Functions**: All 31+ mathematical tools listed above
+- **Functions**: All 33+ mathematical tools listed above
 - **Arrays**: `[1,2,3,4,5]` notation for statistical functions
 - **Parentheses**: Full support for grouping and precedence
 
@@ -270,6 +284,27 @@ evaluate('sqrt(power(3, 2) + power(4, 2))'); // → 5 (Pythagorean theorem)
 roundToPrecision(3.14159265359, 4); // → 3.1416
 ```
 
+### Programming & Algorithm Applications
+
+```javascript
+// Checking divisibility
+modulo(128, 8); // → 0 (128 is divisible by 8)
+modulo(129, 8); // → 1 (129 is not divisible by 8)
+
+// Cycling through values (circular arrays)
+evaluate('5 % 3'); // → 2 (index 5 maps to position 2 in 3-element array)
+evaluate('(10 + 7) % 12'); // → 5 (hours calculation: 10 AM + 7 hours = 5 PM)
+
+// Hash table indexing
+modulo(1337, 101); // → 17 (hash value 1337 maps to bucket 17 in 101-bucket table)
+
+// Digital signal processing
+evaluate('modulo(123456, power(10, 3))'); // → 456 (extract last 3 digits)
+
+// Game development (wrapping coordinates)
+evaluate('(playerX + moveX) % mapWidth'); // Wrap player position on game map
+```
+
 ## ⚙️ Technical Specifications
 
 - **MCP SDK Version**: 1.6.0+
@@ -284,7 +319,7 @@ roundToPrecision(3.14159265359, 4); // → 3.1416
 
 Math Tools provides robust error handling for all edge cases:
 
-- **Division by zero**: Clear error messages
+- **Division by zero**: Clear error messages for division and modulo operations
 - **Invalid inputs**: Type validation with descriptive feedback
 - **Empty arrays**: Minimum element requirements enforced
 - **Malformed expressions**: Detailed parsing error information
@@ -305,4 +340,4 @@ MIT License - feel free to use in your projects!
 
 ---
 
-**Transform your AI assistant into a mathematical powerhouse with 32+ tools and unlimited expression complexity.** 🧮✨
+**Transform your AI assistant into a mathematical powerhouse with 34+ tools and unlimited expression complexity.** 🧮✨

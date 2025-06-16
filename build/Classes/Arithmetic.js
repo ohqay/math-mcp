@@ -310,4 +310,37 @@ export class Arithmetic {
         }
         return result;
     }
+    /**
+     * Calculate the modulo operation (remainder after division)
+     * @param dividend - The number being divided
+     * @param divisor - The number to divide by
+     * @returns remainder after division (dividend % divisor)
+     * @throws Error if either number is invalid or divisor is zero
+     */
+    static modulo(dividend, divisor) {
+        this.validateNumber(dividend, 'dividend');
+        this.validateNumber(divisor, 'divisor');
+        if (divisor === 0) {
+            throw new Error('Modulo by zero is not allowed. Divisor cannot be zero.');
+        }
+        const result = dividend % divisor;
+        return result;
+    }
+    /**
+     * Calculate the IEEE 754 remainder operation
+     * @param dividend - The number being divided
+     * @param divisor - The number to divide by
+     * @returns IEEE 754 remainder (same as modulo in JavaScript)
+     * @throws Error if either number is invalid or divisor is zero
+     */
+    static remainder(dividend, divisor) {
+        this.validateNumber(dividend, 'dividend');
+        this.validateNumber(divisor, 'divisor');
+        if (divisor === 0) {
+            throw new Error('Remainder by zero is not allowed. Divisor cannot be zero.');
+        }
+        // Note: JavaScript's % operator implements IEEE 754 remainder
+        const result = dividend % divisor;
+        return result;
+    }
 }

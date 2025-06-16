@@ -122,6 +122,58 @@ mathServer.tool("division", "Performs division by dividing the first number by t
     }
 });
 /**
+ * Modulo operation
+ * Calculates the remainder when the first number is divided by the second number
+ */
+mathServer.tool("modulo", "Performs modulo operation by calculating the remainder when the dividend is divided by the divisor. Returns the remainder (dividend % divisor). Handles modulo by zero with appropriate error.", {
+    dividend: z.number().describe("The number being divided (dividend)"),
+    divisor: z.number().describe("The number to divide by (divisor, must not be zero)")
+}, async ({ dividend, divisor }) => {
+    try {
+        const value = Arithmetic.modulo(dividend, divisor);
+        return {
+            content: [{
+                    type: "text",
+                    text: `${value}`
+                }]
+        };
+    }
+    catch (error) {
+        return {
+            content: [{
+                    type: "text",
+                    text: `Error: ${error instanceof Error ? error.message : 'An unexpected error occurred during modulo operation.'}`
+                }]
+        };
+    }
+});
+/**
+ * Remainder operation
+ * Calculates the IEEE 754 remainder when the first number is divided by the second number
+ */
+mathServer.tool("remainder", "Performs IEEE 754 remainder operation by calculating the remainder when the dividend is divided by the divisor. Returns the remainder (dividend % divisor). Handles remainder by zero with appropriate error.", {
+    dividend: z.number().describe("The number being divided (dividend)"),
+    divisor: z.number().describe("The number to divide by (divisor, must not be zero)")
+}, async ({ dividend, divisor }) => {
+    try {
+        const value = Arithmetic.remainder(dividend, divisor);
+        return {
+            content: [{
+                    type: "text",
+                    text: `${value}`
+                }]
+        };
+    }
+    catch (error) {
+        return {
+            content: [{
+                    type: "text",
+                    text: `Error: ${error instanceof Error ? error.message : 'An unexpected error occurred during remainder operation.'}`
+                }]
+        };
+    }
+});
+/**
  * Sum operation
  * Calculates the sum of an array of numbers
  */

@@ -5,8 +5,8 @@ import { DataScience } from './DataScience.js';
 /**
  * ExpressionEvaluator class provides functionality to parse and evaluate mathematical expressions
  * Supports:
- * - Basic operators: +, -, *, /, ^ (power)
- * - Arithmetic functions: sqrt(), abs(), power(), floor(), ceil(), round(), sum()
+ * - Basic operators: +, -, *, /, %, ^ (power)
+ * - Arithmetic functions: sqrt(), abs(), power(), floor(), ceil(), round(), sum(), modulo(), remainder()
  * - Precision functions: roundToPrecision(), floorToPrecision(), ceilToPrecision()
  * - Number theory: factorial(), gcd(), lcm()
  * - Statistical functions: mean(), median(), mode(), min(), max(), variance(), standardDeviation(), range(), percentile()
@@ -26,7 +26,7 @@ export class ExpressionEvaluator {
     // Supported functions
     private static readonly FUNCTIONS = [
         // Arithmetic functions
-        'sqrt', 'abs', 'power', 'floor', 'ceil', 'round', 'sum',
+        'sqrt', 'abs', 'power', 'floor', 'ceil', 'round', 'sum', 'modulo', 'remainder',
         // Precision functions
         'roundtoprecision', 'floortoprecision', 'ceiltoprecision',
         // Number theory functions
@@ -49,7 +49,7 @@ export class ExpressionEvaluator {
         const cleaned = expression.replace(/\s+/g, '');
         
         // Regular expression to match tokens
-        const tokenRegex = /([a-zA-Z_][a-zA-Z0-9_]*|\d+\.?\d*|\[[\d,.\s-]+\]|[+\-*/^(),])/g;
+        const tokenRegex = /([a-zA-Z_][a-zA-Z0-9_]*|\d+\.?\d*|\[[\d,.\s-]+\]|[+\-*/%^(),])/g;
         const tokens = cleaned.match(tokenRegex);
         
         if (!tokens) {
@@ -154,6 +154,18 @@ export class ExpressionEvaluator {
                     throw new Error('lcm() requires exactly two numeric arguments');
                 }
                 return Arithmetic.lcm(args[0] as number, args[1] as number);
+                
+            case 'modulo':
+                if (args.length !== 2 || Array.isArray(args[0]) || Array.isArray(args[1])) {
+                    throw new Error('modulo() requires exactly two numeric arguments');
+                }
+                return Arithmetic.modulo(args[0] as number, args[1] as number);
+                
+            case 'remainder':
+                if (args.length !== 2 || Array.isArray(args[0]) || Array.isArray(args[1])) {
+                    throw new Error('remainder() requires exactly two numeric arguments');
+                }
+                return Arithmetic.remainder(args[0] as number, args[1] as number);
                 
             // Precision functions (two numeric arguments)
             case 'roundtoprecision':
@@ -379,20 +391,22 @@ export class ExpressionEvaluator {
     }
 
     /**
-     * Parses multiplication and division (medium precedence)
+     * Parses multiplication, division, and modulo (medium precedence)
      */
     private static parseMultiplicationDivision(tokens: string[], index: { value: number }): number {
         let left = this.parsePower(tokens, index);
         
-        while (index.value < tokens.length && (tokens[index.value] === '*' || tokens[index.value] === '/')) {
+        while (index.value < tokens.length && (tokens[index.value] === '*' || tokens[index.value] === '/' || tokens[index.value] === '%')) {
             const operator = tokens[index.value];
             index.value++;
             const right = this.parsePower(tokens, index);
             
             if (operator === '*') {
                 left = Arithmetic.multiply(left, right);
-            } else {
+            } else if (operator === '/') {
                 left = Arithmetic.division(left, right);
+            } else if (operator === '%') {
+                left = Arithmetic.modulo(left, right);
             }
         }
         
