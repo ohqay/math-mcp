@@ -236,15 +236,13 @@ export class ExpressionEvaluator {
                 if (args.length !== 1 || !Array.isArray(args[0])) {
                     throw new Error('normalizeArray() requires exactly one array argument');
                 }
-                const normalized = DataScience.normalizeArray(args[0] as number[]);
-                return normalized[0]; // Return first element for expression evaluation
+                return DataScience.normalizeArray(args[0] as number[]);
                 
             case 'standardizearray':
                 if (args.length !== 1 || !Array.isArray(args[0])) {
                     throw new Error('standardizeArray() requires exactly one array argument');
                 }
-                const standardized = DataScience.standardizeArray(args[0] as number[]);
-                return standardized[0]; // Return first element for expression evaluation
+                return DataScience.standardizeArray(args[0] as number[]);
                 
             // Functions with array and numeric arguments
             case 'percentile':
