@@ -15,65 +15,18 @@ A comprehensive Model Context Protocol (MCP) server that provides LLMs with **34
 
 ### **Expression Evaluator**
 
-- **Complex Mathematical Expressions**: Evaluate sophisticated mathematical expressions in a single call
+The `evaluate` tool is the most powerful feature, allowing complex mathematical expressions in a single call:
+
+- **Complex Mathematical Expressions**: Evaluate sophisticated mathematical expressions 
 - **Function Composition**: Chain mathematical functions together seamlessly
 - **Array Support**: Use array notation `[1,2,3,4,5]` directly in expressions
 - **Operator Support**: Full support for `+`, `-`, `*`, `/`, `^` (power), `%` (modulo) operators
 - **Constants**: Built-in mathematical constants (`pi`, `e`)
 - **Precedence Handling**: Proper mathematical operator precedence and parentheses support
 
-### **Basic Arithmetic (10 tools)**
-
-- `add` - Addition of two numbers
-- `subtract` - Subtraction with proper minuend/subtrahend handling
-- `multiply` - Multiplication of two numbers
-- `division` - Division with zero-division error handling
-- `modulo` - Modulo operation (dividend % divisor)
-- `remainder` - IEEE 754 remainder operation
-- `sum` - Sum multiple numbers from an array
-- `power` - Exponentiation (base^exponent)
-- `sqrt` - Square root calculation
-- `abs` - Absolute value calculation
-
-### **Advanced Mathematics (6 tools)**
-
-- `factorial` - Factorial calculation for non-negative integers
-- `gcd` - Greatest Common Divisor using Euclidean algorithm
-- `lcm` - Least Common Multiple calculation
-- `floor` - Round down to nearest integer
-- `ceiling` - Round up to nearest integer
-- `round` - Round to nearest integer using standard rules
-
-### **Precision Rounding (3 tools)**
-
-- `roundToPrecision` - Round to specified decimal places
-- `floorToPrecision` - Floor to specified decimal places
-- `ceilToPrecision` - Ceiling to specified decimal places
-
-### **Statistical Analysis (9 tools)**
-
-- `mean` - Arithmetic mean (average) calculation
-- `median` - Middle value with even-length array handling
-- `mode` - Most frequent value(s) in dataset
-- `min` - Minimum value detection
-- `max` - Maximum value detection
-- `variance` - Population variance calculation
-- `standardDeviation` - Population standard deviation
-- `range` - Difference between max and min values
-- `percentile` - Percentile calculation with linear interpolation
-
-### **Machine Learning & Data Science (6 tools)**
-
-- `correlation` - Pearson correlation coefficient between datasets
-- `covariance` - Sample covariance with Bessel's correction
-- `zscore` - Z-score (standard score) calculation
-- `normalizeArray` - Min-max normalization (0-1 scaling)
-- `standardizeArray` - Z-score standardization (mean=0, std=1)
-
 ### **Professional Error Handling**
 
-- Comprehensive input validation
-- Clear, descriptive error messages
+- Comprehensive input validation with clear, descriptive error messages
 - Graceful handling of edge cases (division by zero, empty arrays, etc.)
 - Type safety with Zod schema validation
 
