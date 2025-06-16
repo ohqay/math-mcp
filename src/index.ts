@@ -311,6 +311,57 @@ mathServer.tool("round", "Rounds a number to the nearest integer", {
 })
 
 /**
+ * Round to precision operation
+ * Rounds a number to a specified number of decimal places
+ */
+mathServer.tool("roundToPrecision", "Rounds a number to a specified number of decimal places", {
+    number: z.number().describe("The number to round"),
+    decimalPlaces: z.number().int().min(0).max(15).describe("The number of decimal places to round to (0-15)")
+}, async ({ number, decimalPlaces }) => {
+    const value = Arithmetic.roundToPrecision(number, decimalPlaces)
+    return {
+        content: [{
+            type: "text",
+            text: `${value}`
+        }]
+    }
+})
+
+/**
+ * Floor to precision operation
+ * Floors a number to a specified number of decimal places
+ */
+mathServer.tool("floorToPrecision", "Floors a number to a specified number of decimal places", {
+    number: z.number().describe("The number to floor"),
+    decimalPlaces: z.number().int().min(0).max(15).describe("The number of decimal places to floor to (0-15)")
+}, async ({ number, decimalPlaces }) => {
+    const value = Arithmetic.floorToPrecision(number, decimalPlaces)
+    return {
+        content: [{
+            type: "text",
+            text: `${value}`
+        }]
+    }
+})
+
+/**
+ * Ceil to precision operation
+ * Ceils a number to a specified number of decimal places
+ */
+mathServer.tool("ceilToPrecision", "Ceils a number to a specified number of decimal places", {
+    number: z.number().describe("The number to ceil"),
+    decimalPlaces: z.number().int().min(0).max(15).describe("The number of decimal places to ceil to (0-15)")
+}, async ({ number, decimalPlaces }) => {
+    const value = Arithmetic.ceilToPrecision(number, decimalPlaces)
+    return {
+        content: [{
+            type: "text",
+            text: `${value}`
+        }]
+    }
+})
+
+/**
  * Power operation
  * Raises a base number to the power of an exponent
  */

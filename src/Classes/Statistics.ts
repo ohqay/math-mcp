@@ -138,4 +138,93 @@ export class Statistics {
         return maxValue;
     }
 
+    /**
+     * Calculate the population variance of an array of numbers
+     * @param numbers - Array of numbers to calculate the variance of
+     * @returns The population variance value
+     * @throws Error if array is empty or contains invalid numbers
+     */
+    static variance(numbers: number[]): number {
+        this.validateNumberArray(numbers, 'numbers');
+        
+        const mean = this.mean(numbers);
+        const squaredDifferences = numbers.map(num => Math.pow(num - mean, 2));
+        const variance = squaredDifferences.reduce((sum, squaredDiff) => sum + squaredDiff, 0) / numbers.length;
+
+        return variance;
+    }
+
+    /**
+     * Calculate the standard deviation of an array of numbers
+     * @param numbers - Array of numbers to calculate the standard deviation of
+     * @returns The standard deviation value
+     * @throws Error if array is empty or contains invalid numbers
+     */
+    static standardDeviation(numbers: number[]): number {
+        this.validateNumberArray(numbers, 'numbers');
+        
+        const varianceValue = this.variance(numbers);
+        const standardDev = Math.sqrt(varianceValue);
+
+        return standardDev;
+    }
+
+    /**
+     * Calculate the range (difference between max and min) of an array of numbers
+     * @param numbers - Array of numbers to calculate the range of
+     * @returns The range value (max - min)
+     * @throws Error if array is empty or contains invalid numbers
+     */
+    static range(numbers: number[]): number {
+        this.validateNumberArray(numbers, 'numbers');
+        
+        const maxValue = this.max(numbers);
+        const minValue = this.min(numbers);
+        const rangeValue = maxValue - minValue;
+
+        return rangeValue;
+    }
+
+    /**
+     * Calculate the percentile value of an array of numbers
+     * @param numbers - Array of numbers to calculate the percentile from
+     * @param p - The percentile to calculate (0-100)
+     * @returns The percentile value
+     * @throws Error if array is empty, contains invalid numbers, or p is out of range
+     */
+    static percentile(numbers: number[], p: number): number {
+        this.validateNumberArray(numbers, 'numbers');
+        
+        if (typeof p !== 'number' || isNaN(p) || !isFinite(p)) {
+            throw new Error('p must be a valid number');
+        }
+        if (p < 0 || p > 100) {
+            throw new Error('p must be between 0 and 100');
+        }
+        
+        // Create a copy and sort the array
+        const sortedNumbers = [...numbers].sort((a, b) => a - b);
+        
+        // Handle edge cases
+        if (p === 0) return sortedNumbers[0];
+        if (p === 100) return sortedNumbers[sortedNumbers.length - 1];
+        
+        // Calculate the index using the nearest-rank method
+        const index = (p / 100) * (sortedNumbers.length - 1);
+        
+        // If index is an integer, return the value at that index
+        if (Number.isInteger(index)) {
+            return sortedNumbers[index];
+        }
+        
+        // Otherwise, interpolate between the two nearest values
+        const lowerIndex = Math.floor(index);
+        const upperIndex = Math.ceil(index);
+        const weight = index - lowerIndex;
+        
+        const percentileValue = sortedNumbers[lowerIndex] * (1 - weight) + sortedNumbers[upperIndex] * weight;
+
+        return percentileValue;
+    }
+
 }
