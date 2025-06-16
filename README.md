@@ -1,67 +1,298 @@
-# Math-MCP
+# Math Tools
 
 ```
-███╗   ███╗ █████╗ ████████╗██╗  ██╗
-████╗ ████║██╔══██╗╚══██╔══╝██║  ██║
-██╔████╔██║███████║   ██║   ███████║
-██║╚██╔╝██║██╔══██║   ██║   ██╔══██║
-██║ ╚═╝ ██║██║  ██║   ██║   ██║  ██║
-╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝
-████████╗ ██████╗  ██████╗ ██╗     ███████╗
-╚══██╔══╝██╔═══██╗██╔═══██╗██║     ██╔════╝
-   ██║   ██║   ██║██║   ██║██║     ███████╗
-   ██║   ██║   ██║██║   ██║██║     ╚════██║
-   ██║   ╚██████╔╝╚██████╔╝███████╗███████║
-   ╚═╝    ╚═════╝  ╚═════╝ ╚══════╝╚══════╝
+███╗   ███╗ █████╗ ████████╗██╗  ██╗    ████████╗ ██████╗  ██████╗ ██╗     ███████╗
+████╗ ████║██╔══██╗╚══██╔══╝██║  ██║    ╚══██╔══╝██╔═══██╗██╔═══██╗██║     ██╔════╝
+██╔████╔██║███████║   ██║   ███████║       ██║   ██║   ██║██║   ██║██║     ███████╗
+██║╚██╔╝██║██╔══██║   ██║   ██╔══██║       ██║   ██║   ██║██║   ██║██║     ╚════██║
+██║ ╚═╝ ██║██║  ██║   ██║   ██║  ██║       ██║   ╚██████╔╝╚██████╔╝███████╗███████║
+╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝       ╚═╝    ╚═════╝  ╚═════╝ ╚══════╝╚══════╝
 ```
 
-A Model Context Protocol (MCP) server that provides basic mathematical and statistical functions to Large Language Models (LLMs). This server enables LLMs to perform accurate numerical calculations through a simple API.
+A comprehensive Model Context Protocol (MCP) server that provides **32+ mathematical tools** and a powerful **expression evaluator** to Large Language Models. Transform your AI assistant into a mathematical computation powerhouse with support for everything from basic arithmetic to advanced statistical analysis and data science operations.
 
-## Features
+## 🚀 Features
 
-- Basic arithmetic operations (addition, subtraction, multiplication, division)
-- Statistical functions (sum, average, min, max)
-- Rounding functions (floor, ceiling, round)
+### **Expression Evaluator**
+- **Complex Mathematical Expressions**: Evaluate sophisticated mathematical expressions in a single call
+- **Function Composition**: Chain mathematical functions together seamlessly
+- **Array Support**: Use array notation `[1,2,3,4,5]` directly in expressions
+- **Operator Support**: Full support for `+`, `-`, `*`, `/`, `^` (power) operators
+- **Constants**: Built-in mathematical constants (`pi`, `e`)
+- **Precedence Handling**: Proper mathematical operator precedence and parentheses support
 
-## Installation
+### **Basic Arithmetic (8 tools)**
+- `add` - Addition of two numbers
+- `subtract` - Subtraction with proper minuend/subtrahend handling
+- `multiply` - Multiplication of two numbers
+- `division` - Division with zero-division error handling
+- `sum` - Sum multiple numbers from an array
+- `power` - Exponentiation (base^exponent)
+- `sqrt` - Square root calculation
+- `abs` - Absolute value calculation
 
-### Installing via Smithery
+### **Advanced Mathematics (6 tools)**
+- `factorial` - Factorial calculation for non-negative integers
+- `gcd` - Greatest Common Divisor using Euclidean algorithm
+- `lcm` - Least Common Multiple calculation
+- `floor` - Round down to nearest integer
+- `ceiling` - Round up to nearest integer
+- `round` - Round to nearest integer using standard rules
 
-To install Math-MCP for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@EthanHenrickson/math-mcp):
+### **Precision Rounding (3 tools)**
+- `roundToPrecision` - Round to specified decimal places
+- `floorToPrecision` - Floor to specified decimal places  
+- `ceilToPrecision` - Ceiling to specified decimal places
+
+### **Statistical Analysis (9 tools)**
+- `mean` - Arithmetic mean (average) calculation
+- `median` - Middle value with even-length array handling
+- `mode` - Most frequent value(s) in dataset
+- `min` - Minimum value detection
+- `max` - Maximum value detection
+- `variance` - Population variance calculation
+- `standardDeviation` - Population standard deviation
+- `range` - Difference between max and min values
+- `percentile` - Percentile calculation with linear interpolation
+
+### **Machine Learning & Data Science (6 tools)**
+- `correlation` - Pearson correlation coefficient between datasets
+- `covariance` - Sample covariance with Bessel's correction
+- `zscore` - Z-score (standard score) calculation
+- `normalizeArray` - Min-max normalization (0-1 scaling)
+- `standardizeArray` - Z-score standardization (mean=0, std=1)
+
+### **Professional Error Handling**
+- Comprehensive input validation
+- Clear, descriptive error messages
+- Graceful handling of edge cases (division by zero, empty arrays, etc.)
+- Type safety with Zod schema validation
+
+## 📦 Installation
+
+### Quick Install via Smithery
+
+The fastest way to add Math Tools to Claude Desktop:
 
 ```bash
-npx -y @smithery/cli install @EthanHenrickson/math-mcp --client claude
+npx -y @smithery/cli install @EthanHenrickson/math-tools --client claude
 ```
 
-### Installing Manually
+### Manual Installation
 
-Just clone this repository and save it locally somewhere on your computer.
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/math-tools.git
+   cd math-tools
+   ```
 
-Then add this server to your MCP configuration file:
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-```json
-"math": {
-  "command": "node",
-  "args": ["PATH\\TO\\PROJECT\\math-mcp\\build\\index.js"]
-}
+3. **Build the project:**
+   ```bash
+   npm run build
+   ```
+
+4. **Configure Claude Desktop** by adding to your MCP settings:
+   ```json
+   {
+     "mcpServers": {
+       "math": {
+         "command": "node",
+         "args": ["PATH/TO/PROJECT/math-tools/build/index.js"]
+       }
+     }
+   }
+   ```
+
+   Replace `PATH/TO/PROJECT` with the actual path where you cloned the repository.
+
+## 💡 Usage Examples
+
+### Expression Evaluator
+The `evaluate` tool is the most powerful feature, allowing complex mathematical expressions:
+
+```javascript
+// Financial calculations
+evaluate("(1 + 0.05)^10 * 10000")  // → Compound interest: $16,288.95
+
+// Statistics with embedded calculations  
+evaluate("mean([1,2,3,4,5]) + variance([10,20,30,40,50])")  // → Mean + variance
+
+// Advanced mathematical operations
+evaluate("factorial(5) + gcd(48, 18) * sqrt(16)")  // → 120 + 6 * 4 = 144
+
+// Machine learning preprocessing
+evaluate("correlation([1,2,3,4], [2,4,6,8]) * 100")  // → Perfect correlation: 100
+
+// Complex statistical analysis
+evaluate("zscore(85, mean([70,75,80,85,90]), standardDeviation([70,75,80,85,90]))")
 ```
 
-Replace `PATH\\TO\\PROJECT` with the actual path to where you cloned the repository.
+### Individual Tool Usage
+Each mathematical operation is also available as a standalone tool:
 
-## Available Functions
+```javascript
+// Basic arithmetic
+add(15, 27)          // → 42
+multiply(6, 7)       // → 42
+power(2, 10)         // → 1024
 
-The Math-MCP server provides the following mathematical operations:
+// Statistical analysis
+mean([85, 92, 78, 96, 88])           // → 87.8
+standardDeviation([10, 12, 14, 16, 18])  // → 2.83
+percentile([1,2,3,4,5,6,7,8,9,10], 75)   // → 7.75
 
-| Function   | Description                                         | Parameters                                                                          |
-| ---------- | --------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `add`      | Adds two numbers together                           | `firstNumber`: The first addend<br>`secondNumber`: The second addend                |
-| `subtract` | Subtracts the second number from the first number   | `minuend`: The number to subtract from<br>`subtrahend`: The number being subtracted |
-| `multiply` | Multiplies two numbers together                     | `firstFactor`: The first factor<br>`secondFactor`: The second factor                |
-| `division` | Divides the first number by the second number       | `numerator`: The number being divided<br>`denominator`: The number to divide by     |
-| `sum`      | Adds any number of numbers together                 | `numbers`: Array of numbers to sum                                                  |
-| `average`  | Calculates the arithmetic mean of a list of numbers | `numbers`: Array of numbers to find the average of                                  |
-| `min`      | Finds the minimum value from a list of numbers      | `numbers`: Array of numbers to find the minimum of                                  |
-| `max`      | Finds the maximum value from a list of numbers      | `numbers`: Array of numbers to find the maximum of                                  |
-| `floor`    | Rounds a number down to the nearest integer         | `value`: The number to round down                                                   |
-| `ceiling`  | Rounds a number up to the nearest integer           | `value`: The number to round up                                                     |
-| `round`    | Rounds a number to the nearest integer              | `value`: The number to round                                                        |
+// Data science operations
+normalizeArray([10, 20, 30, 40, 50])     // → [0, 0.25, 0.5, 0.75, 1]
+correlation([1,2,3,4,5], [2,4,6,8,10])   // → 1 (perfect positive correlation)
+```
+
+## 🔧 Tool Reference
+
+### Basic Arithmetic
+
+| Tool | Parameters | Description |
+|------|------------|-------------|
+| `add` | `firstNumber`, `secondNumber` | Addition of two numbers |
+| `subtract` | `minuend`, `subtrahend` | Subtraction (minuend - subtrahend) |
+| `multiply` | `firstNumber`, `secondNumber` | Multiplication of two numbers |
+| `division` | `numerator`, `denominator` | Division with zero-check |
+| `sum` | `numbers[]` | Sum all numbers in array |
+| `power` | `base`, `exponent` | Exponentiation (base^exponent) |
+| `sqrt` | `number` | Square root calculation |
+| `abs` | `number` | Absolute value |
+
+### Advanced Mathematics
+
+| Tool | Parameters | Description |
+|------|------------|-------------|
+| `factorial` | `n` (≥0) | Factorial calculation (n!) |
+| `gcd` | `a`, `b` | Greatest Common Divisor |
+| `lcm` | `a`, `b` | Least Common Multiple |
+| `floor` | `number` | Round down to integer |
+| `ceiling` | `number` | Round up to integer |
+| `round` | `number` | Round to nearest integer |
+
+### Precision Rounding
+
+| Tool | Parameters | Description |
+|------|------------|-------------|
+| `roundToPrecision` | `number`, `decimalPlaces` | Round to N decimal places |
+| `floorToPrecision` | `number`, `decimalPlaces` | Floor to N decimal places |
+| `ceilToPrecision` | `number`, `decimalPlaces` | Ceiling to N decimal places |
+
+### Statistical Analysis
+
+| Tool | Parameters | Description |
+|------|------------|-------------|
+| `mean` | `numbers[]` | Arithmetic mean (average) |
+| `median` | `numbers[]` | Middle value of sorted dataset |
+| `mode` | `numbers[]` | Most frequent value(s) |
+| `min` | `numbers[]` | Minimum value |
+| `max` | `numbers[]` | Maximum value |
+| `variance` | `numbers[]` | Population variance |
+| `standardDeviation` | `numbers[]` | Population standard deviation |
+| `range` | `numbers[]` | Max - Min difference |
+| `percentile` | `numbers[]`, `p` (0-100) | Value at percentile p |
+
+### Machine Learning & Data Science
+
+| Tool | Parameters | Description |
+|------|------------|-------------|
+| `correlation` | `xArray[]`, `yArray[]` | Pearson correlation coefficient |
+| `covariance` | `xArray[]`, `yArray[]` | Sample covariance |
+| `zscore` | `value`, `mean`, `stdDev` | Standard score calculation |
+| `normalizeArray` | `numbers[]` | Min-max normalization (0-1 scale) |
+| `standardizeArray` | `numbers[]` | Z-score standardization |
+
+### Expression Evaluator
+
+| Tool | Parameters | Description |
+|------|------------|-------------|
+| `evaluate` | `expression` (string) | Evaluate complex mathematical expressions |
+
+**Supported in expressions:**
+- **Operators**: `+`, `-`, `*`, `/`, `^` (power)
+- **Constants**: `pi`, `e`
+- **Functions**: All 31+ mathematical tools listed above
+- **Arrays**: `[1,2,3,4,5]` notation for statistical functions
+- **Parentheses**: Full support for grouping and precedence
+
+## 🎯 Real-World Applications
+
+### Financial Analysis
+```javascript
+// Investment growth calculation
+evaluate("10000 * (1 + 0.07)^20")  // $38,696.84 after 20 years at 7%
+
+// Risk assessment using standard deviation
+standardDeviation([12.5, 15.2, 8.7, 18.9, 11.3])  // Portfolio volatility
+```
+
+### Data Science & Analytics
+```javascript
+// Correlation analysis
+correlation([100, 150, 200, 250, 300], [25, 30, 35, 40, 45])  // → 1.0
+
+// Data preprocessing pipeline
+evaluate("mean(normalizeArray([10, 20, 30, 40, 50]))")  // → 0.5
+```
+
+### Statistical Research
+```javascript
+// Population analysis
+evaluate("zscore(175, mean([160, 165, 170, 175, 180]), standardDeviation([160, 165, 170, 175, 180]))")
+
+// Percentile calculations for distributions
+percentile([45, 52, 58, 61, 66, 72, 78, 83, 89, 95], 90)  // → 91.5
+```
+
+### Engineering Calculations
+```javascript
+// Complex mathematical formulas
+evaluate("sqrt(power(3, 2) + power(4, 2))")  // → 5 (Pythagorean theorem)
+
+// Precision engineering
+roundToPrecision(3.14159265359, 4)  // → 3.1416
+```
+
+## ⚙️ Technical Specifications
+
+- **MCP SDK Version**: 1.6.0+
+- **Node.js**: ES Modules support required
+- **TypeScript**: Full type safety with Zod validation
+- **Precision**: IEEE 754 double-precision floating point
+- **Array Size**: No arbitrary limits (memory-constrained)
+- **Expression Complexity**: Supports deeply nested expressions
+- **Error Handling**: Comprehensive validation and user-friendly messages
+
+## 🛡️ Error Handling
+
+Math Tools provides robust error handling for all edge cases:
+
+- **Division by zero**: Clear error messages
+- **Invalid inputs**: Type validation with descriptive feedback  
+- **Empty arrays**: Minimum element requirements enforced
+- **Malformed expressions**: Detailed parsing error information
+- **Numerical overflow**: Proper handling of infinite/NaN results
+- **Array length mismatches**: Validation for paired datasets
+
+## 🚀 Getting Started
+
+1. **Install** Math Tools using Smithery or manual setup
+2. **Restart Claude Desktop** to load the new MCP server  
+3. **Test with simple operations**: Try `add(2, 3)` or `mean([1,2,3,4,5])`
+4. **Explore the expression evaluator**: Use `evaluate("sqrt(16) + power(2, 3)")`
+5. **Build complex calculations**: Combine multiple functions and operations
+
+## 📝 License
+
+MIT License - feel free to use in your projects!
+
+---
+
+**Transform your AI assistant into a mathematical powerhouse with 32+ tools and unlimited expression complexity.** 🧮✨

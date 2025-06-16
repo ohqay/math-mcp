@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Math-MCP is a Model Context Protocol (MCP) server that provides mathematical and statistical functions to Large Language Models. It's built with TypeScript and uses the MCP SDK to expose mathematical operations as tools.
+Math-Tools is a Model Context Protocol (MCP) server that provides mathematical and statistical functions to Large Language Models. It's built with TypeScript and uses the MCP SDK to expose mathematical operations as tools.
 
 ## Development Commands
 
