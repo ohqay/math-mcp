@@ -736,13 +736,22 @@ mathServer.tool("correlation", "Calculates the Pearson correlation coefficient b
     xArray: z.array(z.number()).min(2).describe("The first array of numbers (must have at least 2 elements)"),
     yArray: z.array(z.number()).min(2).describe("The second array of numbers (must have at least 2 elements and same length as xArray)")
 }, async ({ xArray, yArray }) => {
-    const value = Statistics.correlation(xArray, yArray)
+    try {
+        const value = Statistics.correlation(xArray, yArray)
 
-    return {
-        content: [{
-            type: "text",
-            text: `${value}`
-        }]
+        return {
+            content: [{
+                type: "text",
+                text: `${value}`
+            }]
+        }
+    } catch (error) {
+        return {
+            content: [{
+                type: "text",
+                text: `Error: ${error instanceof Error ? error.message : 'An unexpected error occurred during correlation calculation.'}`
+            }]
+        }
     }
 })
 
@@ -754,13 +763,22 @@ mathServer.tool("covariance", "Calculates the sample covariance between two arra
     xArray: z.array(z.number()).min(2).describe("The first array of numbers (must have at least 2 elements)"),
     yArray: z.array(z.number()).min(2).describe("The second array of numbers (must have at least 2 elements and same length as xArray)")
 }, async ({ xArray, yArray }) => {
-    const value = Statistics.covariance(xArray, yArray)
+    try {
+        const value = Statistics.covariance(xArray, yArray)
 
-    return {
-        content: [{
-            type: "text",
-            text: `${value}`
-        }]
+        return {
+            content: [{
+                type: "text",
+                text: `${value}`
+            }]
+        }
+    } catch (error) {
+        return {
+            content: [{
+                type: "text",
+                text: `Error: ${error instanceof Error ? error.message : 'An unexpected error occurred during covariance calculation.'}`
+            }]
+        }
     }
 })
 
@@ -773,13 +791,22 @@ mathServer.tool("zscore", "Calculates the z-score (standard score) for a given v
     mean: z.number().describe("The mean of the distribution"),
     stdDev: z.number().positive().describe("The standard deviation of the distribution (must be positive)")
 }, async ({ value, mean, stdDev }) => {
-    const zScore = Statistics.zscore(value, mean, stdDev)
+    try {
+        const zScore = Statistics.zscore(value, mean, stdDev)
 
-    return {
-        content: [{
-            type: "text",
-            text: `${zScore}`
-        }]
+        return {
+            content: [{
+                type: "text",
+                text: `${zScore}`
+            }]
+        }
+    } catch (error) {
+        return {
+            content: [{
+                type: "text",
+                text: `Error: ${error instanceof Error ? error.message : 'An unexpected error occurred during z-score calculation.'}`
+            }]
+        }
     }
 })
 
@@ -790,13 +817,22 @@ mathServer.tool("zscore", "Calculates the z-score (standard score) for a given v
 mathServer.tool("normalizeArray", "Normalizes an array of numbers using min-max normalization (0-1 scale)", {
     numbers: z.array(z.number()).min(1).describe("Array of numbers to normalize")
 }, async ({ numbers }) => {
-    const normalizedArray = DataScience.normalizeArray(numbers)
+    try {
+        const normalizedArray = DataScience.normalizeArray(numbers)
 
-    return {
-        content: [{
-            type: "text",
-            text: `[${normalizedArray.join(', ')}]`
-        }]
+        return {
+            content: [{
+                type: "text",
+                text: `[${normalizedArray.join(', ')}]`
+            }]
+        }
+    } catch (error) {
+        return {
+            content: [{
+                type: "text",
+                text: `Error: ${error instanceof Error ? error.message : 'An unexpected error occurred during array normalization.'}`
+            }]
+        }
     }
 })
 
@@ -807,13 +843,22 @@ mathServer.tool("normalizeArray", "Normalizes an array of numbers using min-max 
 mathServer.tool("standardizeArray", "Standardizes an array of numbers using z-score standardization (mean=0, std=1)", {
     numbers: z.array(z.number()).min(2).describe("Array of numbers to standardize (must have at least 2 elements)")
 }, async ({ numbers }) => {
-    const standardizedArray = DataScience.standardizeArray(numbers)
+    try {
+        const standardizedArray = DataScience.standardizeArray(numbers)
 
-    return {
-        content: [{
-            type: "text",
-            text: `[${standardizedArray.join(', ')}]`
-        }]
+        return {
+            content: [{
+                type: "text",
+                text: `[${standardizedArray.join(', ')}]`
+            }]
+        }
+    } catch (error) {
+        return {
+            content: [{
+                type: "text",
+                text: `Error: ${error instanceof Error ? error.message : 'An unexpected error occurred during array standardization.'}`
+            }]
+        }
     }
 })
 
