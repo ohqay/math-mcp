@@ -287,8 +287,8 @@ mathServer.tool("max", "Finds the largest value in a dataset. Efficiently determ
  * Variance operation
  * Calculates the population variance of an array of numbers
  */
-mathServer.tool("variance", "Calculates the population variance of a list of numbers", {
-    numbers: z.array(z.number()).describe("Array of numbers to calculate the variance of")
+mathServer.tool("variance", "Calculates the population variance of a dataset, measuring how spread out the data points are from the mean. Uses the formula: Σ(x - μ)² / N where μ is the mean and N is the population size.", {
+    numbers: z.array(z.number()).min(1).describe("Array of numbers to calculate the population variance of (must contain at least 1 element)")
 }, async ({ numbers }) => {
     try {
         const value = Statistics.variance(numbers)
@@ -313,8 +313,8 @@ mathServer.tool("variance", "Calculates the population variance of a list of num
  * Standard deviation operation
  * Calculates the standard deviation of an array of numbers
  */
-mathServer.tool("standardDeviation", "Calculates the standard deviation of a list of numbers", {
-    numbers: z.array(z.number()).describe("Array of numbers to calculate the standard deviation of")
+mathServer.tool("standardDeviation", "Calculates the population standard deviation of a dataset, representing the average distance of data points from the mean. Computed as the square root of the population variance.", {
+    numbers: z.array(z.number()).min(1).describe("Array of numbers to calculate the population standard deviation of (must contain at least 1 element)")
 }, async ({ numbers }) => {
     try {
         const value = Statistics.standardDeviation(numbers)
@@ -339,8 +339,8 @@ mathServer.tool("standardDeviation", "Calculates the standard deviation of a lis
  * Range operation
  * Calculates the range (max - min) of an array of numbers
  */
-mathServer.tool("range", "Calculates the range (difference between max and min) of a list of numbers", {
-    numbers: z.array(z.number()).describe("Array of numbers to calculate the range of")
+mathServer.tool("range", "Calculates the range of a dataset, which is the difference between the maximum and minimum values. Formula: max - min. Provides a simple measure of data spread.", {
+    numbers: z.array(z.number()).min(1).describe("Array of numbers to calculate the range of (must contain at least 1 element)")
 }, async ({ numbers }) => {
     try {
         const value = Statistics.range(numbers)
@@ -365,9 +365,9 @@ mathServer.tool("range", "Calculates the range (difference between max and min) 
  * Percentile operation
  * Calculates the percentile value of an array of numbers
  */
-mathServer.tool("percentile", "Calculates the percentile value of a list of numbers", {
-    numbers: z.array(z.number()).describe("Array of numbers to calculate the percentile from"),
-    p: z.number().describe("The percentile to calculate (0-100)")
+mathServer.tool("percentile", "Calculates the value below which a given percentage of data points fall using the nearest-rank method with linear interpolation. Useful for understanding data distribution and identifying outliers.", {
+    numbers: z.array(z.number()).min(1).describe("Array of numbers to calculate the percentile from (must contain at least 1 element)"),
+    p: z.number().min(0).max(100).describe("The percentile to calculate (0-100, where 50 is the median)")
 }, async ({ numbers, p }) => {
     try {
         const value = Statistics.percentile(numbers, p)
@@ -392,8 +392,8 @@ mathServer.tool("percentile", "Calculates the percentile value of a list of numb
  * Floor operation
  * Rounds a number down to the nearest integer
  */
-mathServer.tool("floor", "Rounds a number down to the nearest integer", {
-    number: z.number().describe("The number to round down"),
+mathServer.tool("floor", "Rounds a number down to the nearest integer using the mathematical floor function. Always rounds toward negative infinity (e.g., 2.7 → 2, -2.3 → -3).", {
+    number: z.number().describe("The number to round down to the nearest integer"),
 }, async ({ number }) => {
     try {
         const value = Arithmetic.floor(number)
@@ -418,8 +418,8 @@ mathServer.tool("floor", "Rounds a number down to the nearest integer", {
  * Ceiling operation
  * Rounds a number up to the nearest integer
  */
-mathServer.tool("ceiling", "Rounds a number up to the nearest integer", {
-    number: z.number().describe("The number to round up"),
+mathServer.tool("ceiling", "Rounds a number up to the nearest integer using the mathematical ceiling function. Always rounds toward positive infinity (e.g., 2.1 → 3, -2.7 → -2).", {
+    number: z.number().describe("The number to round up to the nearest integer"),
 }, async ({ number }) => {
     try {
         const value = Arithmetic.ceil(number)
@@ -444,8 +444,8 @@ mathServer.tool("ceiling", "Rounds a number up to the nearest integer", {
  * Round operation
  * Rounds a number to the nearest integer
  */
-mathServer.tool("round", "Rounds a number to the nearest integer", {
-    number: z.number().describe("The number to round"),
+mathServer.tool("round", "Rounds a number to the nearest integer using standard rounding rules. Values with .5 decimal are rounded away from zero (e.g., 2.5 → 3, -2.5 → -3).", {
+    number: z.number().describe("The number to round to the nearest integer"),
 }, async ({ number }) => {
     try {
         const value = Arithmetic.round(number)
@@ -469,9 +469,9 @@ mathServer.tool("round", "Rounds a number to the nearest integer", {
  * Round to precision operation
  * Rounds a number to a specified number of decimal places
  */
-mathServer.tool("roundToPrecision", "Rounds a number to a specified number of decimal places", {
+mathServer.tool("roundToPrecision", "Rounds a number to a specified number of decimal places using standard rounding rules. Useful for controlling precision in calculations and display formatting.", {
     number: z.number().describe("The number to round"),
-    decimalPlaces: z.number().describe("The number of decimal places to round to (0-15)")
+    decimalPlaces: z.number().int().min(0).max(15).describe("The number of decimal places to round to (0-15, where 0 rounds to integer)")
 }, async ({ number, decimalPlaces }) => {
     try {
         const value = Arithmetic.roundToPrecision(number, decimalPlaces)
@@ -495,9 +495,9 @@ mathServer.tool("roundToPrecision", "Rounds a number to a specified number of de
  * Floor to precision operation
  * Floors a number to a specified number of decimal places
  */
-mathServer.tool("floorToPrecision", "Floors a number to a specified number of decimal places", {
+mathServer.tool("floorToPrecision", "Floors a number to a specified number of decimal places, always rounding down toward negative infinity at the specified precision level.", {
     number: z.number().describe("The number to floor"),
-    decimalPlaces: z.number().describe("The number of decimal places to floor to (0-15)")
+    decimalPlaces: z.number().int().min(0).max(15).describe("The number of decimal places to floor to (0-15, where 0 floors to integer)")
 }, async ({ number, decimalPlaces }) => {
     try {
         const value = Arithmetic.floorToPrecision(number, decimalPlaces)
@@ -521,9 +521,9 @@ mathServer.tool("floorToPrecision", "Floors a number to a specified number of de
  * Ceil to precision operation
  * Ceils a number to a specified number of decimal places
  */
-mathServer.tool("ceilToPrecision", "Ceils a number to a specified number of decimal places", {
+mathServer.tool("ceilToPrecision", "Ceils a number to a specified number of decimal places, always rounding up toward positive infinity at the specified precision level.", {
     number: z.number().describe("The number to ceil"),
-    decimalPlaces: z.number().describe("The number of decimal places to ceil to (0-15)")
+    decimalPlaces: z.number().int().min(0).max(15).describe("The number of decimal places to ceil to (0-15, where 0 ceils to integer)")
 }, async ({ number, decimalPlaces }) => {
     try {
         const value = Arithmetic.ceilToPrecision(number, decimalPlaces)
@@ -547,9 +547,9 @@ mathServer.tool("ceilToPrecision", "Ceils a number to a specified number of deci
  * Power operation
  * Raises a base number to the power of an exponent
  */
-mathServer.tool("power", "Raises a base number to the power of an exponent", {
-    base: z.number().describe("The base number"),
-    exponent: z.number().describe("The exponent to raise the base to")
+mathServer.tool("power", "Calculates exponentiation by raising a base number to the power of an exponent. Formula: base^exponent. Handles integer, fractional, and negative exponents.", {
+    base: z.number().describe("The base number to be raised to a power"),
+    exponent: z.number().describe("The exponent (power) to raise the base to")
 }, async ({ base, exponent }) => {
     try {
         const value = Arithmetic.power(base, exponent)
@@ -573,8 +573,8 @@ mathServer.tool("power", "Raises a base number to the power of an exponent", {
  * Square root operation
  * Calculates the square root of a number
  */
-mathServer.tool("sqrt", "Calculates the square root of a number", {
-    number: z.number().describe("The number to find the square root of")
+mathServer.tool("sqrt", "Calculates the square root of a number, finding the value that when multiplied by itself equals the original number. Returns NaN for negative inputs.", {
+    number: z.number().describe("The number to find the square root of (should be non-negative for real results)")
 }, async ({ number }) => {
     try {
         const value = Arithmetic.sqrt(number)
@@ -598,7 +598,7 @@ mathServer.tool("sqrt", "Calculates the square root of a number", {
  * Absolute value operation
  * Calculates the absolute value of a number
  */
-mathServer.tool("abs", "Calculates the absolute value of a number", {
+mathServer.tool("abs", "Calculates the absolute value of a number, returning the non-negative magnitude without regard to sign. Formula: |x| where |5| = 5 and |-5| = 5.", {
     number: z.number().describe("The number to find the absolute value of")
 }, async ({ number }) => {
     try {
@@ -623,9 +623,9 @@ mathServer.tool("abs", "Calculates the absolute value of a number", {
  * GCD operation
  * Calculates the greatest common divisor of two integers using Euclidean algorithm
  */
-mathServer.tool("gcd", "Calculates the greatest common divisor (GCD) of two integers", {
-    a: z.number().describe("The first integer"),
-    b: z.number().describe("The second integer")
+mathServer.tool("gcd", "Calculates the greatest common divisor (GCD) of two integers using the Euclidean algorithm. Returns the largest positive integer that divides both numbers without remainder.", {
+    a: z.number().int().describe("The first integer"),
+    b: z.number().int().describe("The second integer")
 }, async ({ a, b }) => {
     try {
         const value = Arithmetic.gcd(a, b)
@@ -650,9 +650,9 @@ mathServer.tool("gcd", "Calculates the greatest common divisor (GCD) of two inte
  * LCM operation
  * Calculates the least common multiple of two integers
  */
-mathServer.tool("lcm", "Calculates the least common multiple (LCM) of two integers", {
-    a: z.number().describe("The first integer"),
-    b: z.number().describe("The second integer")
+mathServer.tool("lcm", "Calculates the least common multiple (LCM) of two integers, finding the smallest positive integer that is divisible by both numbers. Formula: LCM(a,b) = |a*b| / GCD(a,b).", {
+    a: z.number().int().describe("The first integer"),
+    b: z.number().int().describe("The second integer")
 }, async ({ a, b }) => {
     try {
         const value = Arithmetic.lcm(a, b)
@@ -677,8 +677,8 @@ mathServer.tool("lcm", "Calculates the least common multiple (LCM) of two intege
  * Factorial operation
  * Calculates the factorial of a non-negative integer
  */
-mathServer.tool("factorial", "Calculates the factorial of a non-negative integer", {
-    n: z.number().describe("The integer to calculate factorial of")
+mathServer.tool("factorial", "Calculates the factorial of a non-negative integer, computing the product of all positive integers less than or equal to n. Formula: n! = n × (n-1) × ... × 2 × 1, where 0! = 1.", {
+    n: z.number().int().min(0).describe("The non-negative integer to calculate factorial of (must be ≥ 0)")
 }, async ({ n }) => {
     try {
         const value = Arithmetic.factorial(n)
@@ -703,8 +703,8 @@ mathServer.tool("factorial", "Calculates the factorial of a non-negative integer
  * Expression evaluation operation
  * Evaluates complex mathematical expressions as strings
  */
-mathServer.tool("evaluate", "Evaluates a mathematical expression string with support for operators, functions, and constants", {
-    expression: z.string().describe("The mathematical expression to evaluate (e.g., '2^16 + sqrt(144)', 'mean([1,2,3]) * pi')")
+mathServer.tool("evaluate", "Evaluates complex mathematical expressions from strings with support for arithmetic operators (+, -, *, /, ^), mathematical functions (sin, cos, sqrt, log, etc.), statistical functions (mean, median, etc.), and constants (pi, e). Example: 'sin(pi/2) + sqrt(16) * 2' or 'mean([1,2,3,4,5]) + variance([10,20,30])'.", {
+    expression: z.string().describe("The mathematical expression to evaluate as a string (supports operators, functions, constants, and arrays)")
 }, async ({ expression }) => {
     try {
         const value = ExpressionEvaluator.evaluate(expression);
@@ -732,9 +732,9 @@ mathServer.tool("evaluate", "Evaluates a mathematical expression string with sup
  * Correlation operation
  * Calculates the Pearson correlation coefficient between two arrays of numbers
  */
-mathServer.tool("correlation", "Calculates the Pearson correlation coefficient between two arrays of numbers", {
-    xArray: z.array(z.number()).describe("The first array of numbers"),
-    yArray: z.array(z.number()).describe("The second array of numbers")
+mathServer.tool("correlation", "Calculates the Pearson correlation coefficient between two datasets, measuring the strength and direction of their linear relationship. Returns a value between -1 and 1, where -1 indicates perfect negative correlation, 0 indicates no linear correlation, and 1 indicates perfect positive correlation.", {
+    xArray: z.array(z.number()).min(2).describe("The first array of numbers (must have at least 2 elements)"),
+    yArray: z.array(z.number()).min(2).describe("The second array of numbers (must have at least 2 elements and same length as xArray)")
 }, async ({ xArray, yArray }) => {
     try {
         const value = Statistics.correlation(xArray, yArray)
@@ -759,9 +759,9 @@ mathServer.tool("correlation", "Calculates the Pearson correlation coefficient b
  * Covariance operation
  * Calculates the sample covariance between two arrays of numbers
  */
-mathServer.tool("covariance", "Calculates the sample covariance between two arrays of numbers", {
-    xArray: z.array(z.number()).describe("The first array of numbers"),
-    yArray: z.array(z.number()).describe("The second array of numbers")
+mathServer.tool("covariance", "Calculates the sample covariance between two datasets, measuring how they change together. Positive values indicate variables tend to increase together, negative values indicate one increases as the other decreases. Uses Bessel's correction (n-1) for unbiased estimation.", {
+    xArray: z.array(z.number()).min(2).describe("The first array of numbers (must have at least 2 elements)"),
+    yArray: z.array(z.number()).min(2).describe("The second array of numbers (must have at least 2 elements and same length as xArray)")
 }, async ({ xArray, yArray }) => {
     try {
         const value = Statistics.covariance(xArray, yArray)
@@ -786,10 +786,10 @@ mathServer.tool("covariance", "Calculates the sample covariance between two arra
  * Z-score operation
  * Calculates the z-score (standard score) for a given value
  */
-mathServer.tool("zscore", "Calculates the z-score (standard score) for a given value", {
+mathServer.tool("zscore", "Calculates the z-score (standard score) indicating how many standard deviations a value is from the mean. Formula: (value - mean) / stdDev. Positive z-scores indicate values above the mean, negative z-scores indicate values below the mean.", {
     value: z.number().describe("The value to calculate the z-score for"),
     mean: z.number().describe("The mean of the distribution"),
-    stdDev: z.number().describe("The standard deviation of the distribution")
+    stdDev: z.number().positive().describe("The standard deviation of the distribution (must be positive)")
 }, async ({ value, mean, stdDev }) => {
     try {
         const zScore = Statistics.zscore(value, mean, stdDev)
@@ -814,8 +814,8 @@ mathServer.tool("zscore", "Calculates the z-score (standard score) for a given v
  * Normalize array operation
  * Normalizes an array of numbers using min-max normalization (0-1 scale)
  */
-mathServer.tool("normalizeArray", "Normalizes an array of numbers using min-max normalization (0-1 scale)", {
-    numbers: z.array(z.number()).describe("Array of numbers to normalize")
+mathServer.tool("normalizeArray", "Normalizes an array of numbers using min-max normalization, scaling all values to a 0-1 range. Formula: (x - min) / (max - min). Useful for machine learning preprocessing and data visualization. If all values are identical, returns array of zeros.", {
+    numbers: z.array(z.number()).min(1).describe("Array of numbers to normalize to 0-1 scale (must contain at least 1 element)")
 }, async ({ numbers }) => {
     try {
         const normalizedArray = DataScience.normalizeArray(numbers)
@@ -840,8 +840,8 @@ mathServer.tool("normalizeArray", "Normalizes an array of numbers using min-max 
  * Standardize array operation
  * Standardizes an array of numbers using z-score standardization (mean=0, std=1)
  */
-mathServer.tool("standardizeArray", "Standardizes an array of numbers using z-score standardization (mean=0, std=1)", {
-    numbers: z.array(z.number()).describe("Array of numbers to standardize")
+mathServer.tool("standardizeArray", "Standardizes an array of numbers using z-score standardization, transforming the data to have a mean of 0 and standard deviation of 1. Formula: (x - mean) / stdDev. Useful for machine learning algorithms that assume normally distributed data. If standard deviation is zero, returns array of zeros.", {
+    numbers: z.array(z.number()).min(2).describe("Array of numbers to standardize to mean=0, std=1 (must have at least 2 elements)")
 }, async ({ numbers }) => {
     try {
         const standardizedArray = DataScience.standardizeArray(numbers)
