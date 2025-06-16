@@ -352,7 +352,7 @@ mathServer.tool("range", "Calculates the range (difference between max and min) 
  */
 mathServer.tool("percentile", "Calculates the percentile value of a list of numbers", {
     numbers: z.array(z.number()).min(1).describe("Array of numbers to calculate the percentile from"),
-    p: z.number().min(0).max(100).describe("The percentile to calculate (0-100)")
+    p: z.number().describe("The percentile to calculate (0-100)")
 }, async ({ numbers, p }) => {
     try {
         const value = Statistics.percentile(numbers, p);
@@ -453,7 +453,7 @@ mathServer.tool("round", "Rounds a number to the nearest integer", {
  */
 mathServer.tool("roundToPrecision", "Rounds a number to a specified number of decimal places", {
     number: z.number().describe("The number to round"),
-    decimalPlaces: z.number().int().min(0).max(15).describe("The number of decimal places to round to (0-15)")
+    decimalPlaces: z.number().describe("The number of decimal places to round to (0-15)")
 }, async ({ number, decimalPlaces }) => {
     try {
         const value = Arithmetic.roundToPrecision(number, decimalPlaces);
@@ -479,7 +479,7 @@ mathServer.tool("roundToPrecision", "Rounds a number to a specified number of de
  */
 mathServer.tool("floorToPrecision", "Floors a number to a specified number of decimal places", {
     number: z.number().describe("The number to floor"),
-    decimalPlaces: z.number().int().min(0).max(15).describe("The number of decimal places to floor to (0-15)")
+    decimalPlaces: z.number().describe("The number of decimal places to floor to (0-15)")
 }, async ({ number, decimalPlaces }) => {
     try {
         const value = Arithmetic.floorToPrecision(number, decimalPlaces);
@@ -505,7 +505,7 @@ mathServer.tool("floorToPrecision", "Floors a number to a specified number of de
  */
 mathServer.tool("ceilToPrecision", "Ceils a number to a specified number of decimal places", {
     number: z.number().describe("The number to ceil"),
-    decimalPlaces: z.number().int().min(0).max(15).describe("The number of decimal places to ceil to (0-15)")
+    decimalPlaces: z.number().describe("The number of decimal places to ceil to (0-15)")
 }, async ({ number, decimalPlaces }) => {
     try {
         const value = Arithmetic.ceilToPrecision(number, decimalPlaces);
@@ -556,7 +556,7 @@ mathServer.tool("power", "Raises a base number to the power of an exponent", {
  * Calculates the square root of a number
  */
 mathServer.tool("sqrt", "Calculates the square root of a number", {
-    number: z.number().min(0).describe("The number to find the square root of (must be non-negative)")
+    number: z.number().describe("The number to find the square root of")
 }, async ({ number }) => {
     try {
         const value = Arithmetic.sqrt(number);
@@ -606,8 +606,8 @@ mathServer.tool("abs", "Calculates the absolute value of a number", {
  * Calculates the greatest common divisor of two integers using Euclidean algorithm
  */
 mathServer.tool("gcd", "Calculates the greatest common divisor (GCD) of two integers", {
-    a: z.number().int().describe("The first integer"),
-    b: z.number().int().describe("The second integer")
+    a: z.number().describe("The first integer"),
+    b: z.number().describe("The second integer")
 }, async ({ a, b }) => {
     try {
         const value = Arithmetic.gcd(a, b);
@@ -632,8 +632,8 @@ mathServer.tool("gcd", "Calculates the greatest common divisor (GCD) of two inte
  * Calculates the least common multiple of two integers
  */
 mathServer.tool("lcm", "Calculates the least common multiple (LCM) of two integers", {
-    a: z.number().int().describe("The first integer"),
-    b: z.number().int().describe("The second integer")
+    a: z.number().describe("The first integer"),
+    b: z.number().describe("The second integer")
 }, async ({ a, b }) => {
     try {
         const value = Arithmetic.lcm(a, b);
@@ -658,7 +658,7 @@ mathServer.tool("lcm", "Calculates the least common multiple (LCM) of two intege
  * Calculates the factorial of a non-negative integer
  */
 mathServer.tool("factorial", "Calculates the factorial of a non-negative integer", {
-    n: z.number().int().min(0).describe("The non-negative integer to calculate factorial of")
+    n: z.number().describe("The integer to calculate factorial of")
 }, async ({ n }) => {
     try {
         const value = Arithmetic.factorial(n);
@@ -764,7 +764,7 @@ mathServer.tool("covariance", "Calculates the sample covariance between two arra
 mathServer.tool("zscore", "Calculates the z-score (standard score) for a given value", {
     value: z.number().describe("The value to calculate the z-score for"),
     mean: z.number().describe("The mean of the distribution"),
-    stdDev: z.number().positive().describe("The standard deviation of the distribution (must be positive)")
+    stdDev: z.number().describe("The standard deviation of the distribution")
 }, async ({ value, mean, stdDev }) => {
     try {
         const zScore = Statistics.zscore(value, mean, stdDev);

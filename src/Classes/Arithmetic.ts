@@ -143,10 +143,10 @@ export class Arithmetic {
             throw new Error(`${paramName} must be an integer, received ${decimalPlaces}`);
         }
         if (decimalPlaces < 0) {
-            throw new Error(`${paramName} must be non-negative, received ${decimalPlaces}`);
+            throw new Error(`Decimal places must be non-negative, received ${decimalPlaces}`);
         }
         if (decimalPlaces > 15) {
-            throw new Error(`${paramName} must be 15 or less, received ${decimalPlaces}`);
+            throw new Error(`Decimal places must be 15 or less, received ${decimalPlaces}`);
         }
     }
 
@@ -340,7 +340,7 @@ export class Arithmetic {
         this.validateInteger(n, 'n');
         
         if (n < 0) {
-            throw new Error('n must be a non-negative integer for factorial calculation');
+            throw new Error('Factorial is not defined for negative numbers');
         }
         
         // Handle special case: 0! = 1

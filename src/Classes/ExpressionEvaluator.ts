@@ -1,11 +1,17 @@
 import { Arithmetic } from './Arithmetic.js';
 import { Statistics } from './Statistics.js';
+import { DataScience } from './DataScience.js';
 
 /**
  * ExpressionEvaluator class provides functionality to parse and evaluate mathematical expressions
  * Supports:
  * - Basic operators: +, -, *, /, ^ (power)
- * - Functions: sqrt(), abs(), mean(), min(), max()
+ * - Arithmetic functions: sqrt(), abs(), power(), floor(), ceil(), round(), sum()
+ * - Precision functions: roundToPrecision(), floorToPrecision(), ceilToPrecision()
+ * - Number theory: factorial(), gcd(), lcm()
+ * - Statistical functions: mean(), median(), mode(), min(), max(), variance(), standardDeviation(), range(), percentile()
+ * - Advanced statistics: correlation(), covariance(), zscore()
+ * - Data science: normalizeArray(), standardizeArray()
  * - Constants: pi, e
  * - Array notation: [1,2,3] for statistical functions
  * - Proper parentheses handling and operator precedence
@@ -19,7 +25,18 @@ export class ExpressionEvaluator {
 
     // Supported functions
     private static readonly FUNCTIONS = [
-        'sqrt', 'abs', 'mean', 'min', 'max'
+        // Arithmetic functions
+        'sqrt', 'abs', 'power', 'floor', 'ceil', 'round', 'sum',
+        // Precision functions
+        'roundtoprecision', 'floortoprecision', 'ceiltoprecision',
+        // Number theory functions
+        'factorial', 'gcd', 'lcm',
+        // Statistical functions
+        'mean', 'median', 'mode', 'min', 'max', 'variance', 'standarddeviation', 'range', 'percentile',
+        // Advanced statistics
+        'correlation', 'covariance', 'zscore',
+        // Data science functions
+        'normalizearray', 'standardizearray'
     ];
 
     /**
@@ -76,9 +93,9 @@ export class ExpressionEvaluator {
      * Evaluates a function call
      * @param funcName - Name of the function
      * @param args - Arguments for the function
-     * @returns The result of the function call
+     * @returns The result of the function call (number or number[])
      */
-    private static evaluateFunction(funcName: string, args: (number | number[])[]): number {
+    private static evaluateFunction(funcName: string, args: (number | number[])[]): number | number[] {
         switch (funcName.toLowerCase()) {
             case 'sqrt':
                 if (args.length !== 1 || Array.isArray(args[0])) {
@@ -110,6 +127,36 @@ export class ExpressionEvaluator {
                 }
                 return Statistics.max(args[0] as number[]);
                 
+            case 'correlation':
+                if (args.length !== 2 || !Array.isArray(args[0]) || !Array.isArray(args[1])) {
+                    throw new Error('correlation() requires exactly two array arguments');
+                }
+                return Statistics.correlation(args[0] as number[], args[1] as number[]);
+                
+            case 'covariance':
+                if (args.length !== 2 || !Array.isArray(args[0]) || !Array.isArray(args[1])) {
+                    throw new Error('covariance() requires exactly two array arguments');
+                }
+                return Statistics.covariance(args[0] as number[], args[1] as number[]);
+                
+            case 'zscore':
+                if (args.length !== 3 || Array.isArray(args[0]) || Array.isArray(args[1]) || Array.isArray(args[2])) {
+                    throw new Error('zscore() requires exactly three numeric arguments: value, mean, stdDev');
+                }
+                return Statistics.zscore(args[0] as number, args[1] as number, args[2] as number);
+                
+            case 'normalizearray':
+                if (args.length !== 1 || !Array.isArray(args[0])) {
+                    throw new Error('normalizeArray() requires exactly one array argument');
+                }
+                return DataScience.normalizeArray(args[0] as number[]);
+                
+            case 'standardizearray':
+                if (args.length !== 1 || !Array.isArray(args[0])) {
+                    throw new Error('standardizeArray() requires exactly one array argument');
+                }
+                return DataScience.standardizeArray(args[0] as number[]);
+                
             default:
                 throw new Error(`Unsupported function in expression: ${funcName}`);
         }
@@ -123,6 +170,71 @@ export class ExpressionEvaluator {
      */
     private static parseExpression(tokens: string[], index: { value: number }): number {
         return this.parseAdditionSubtraction(tokens, index);
+    }
+
+    /**
+     * Parses an argument expression that can be either a number or an array
+     * Used for function arguments that may accept array-returning functions
+     * @param tokens - Array of tokens to parse
+     * @param index - Current position in tokens array
+     * @returns Either a number or an array
+     */
+    private static parseArgumentExpression(tokens: string[], index: { value: number }): number | number[] {
+        // Check if this is a function call that might return an array
+        if (index.value < tokens.length && 
+            this.FUNCTIONS.includes(tokens[index.value].toLowerCase()) &&
+            (tokens[index.value].toLowerCase() === 'normalizearray' || tokens[index.value].toLowerCase() === 'standardizearray')) {
+            
+            const funcName = tokens[index.value].toLowerCase();
+            index.value++;
+            
+            if (index.value >= tokens.length || tokens[index.value] !== '(') {
+                throw new Error(`Function ${funcName} must be followed by parentheses`);
+            }
+            
+            index.value++; // Skip opening parenthesis
+            
+            // Parse function arguments
+            const args: (number | number[])[] = [];
+            
+            if (index.value < tokens.length && tokens[index.value] !== ')') {
+                // Parse first argument
+                if (tokens[index.value].startsWith('[') && tokens[index.value].endsWith(']')) {
+                    // Array argument
+                    args.push(this.parseArray(tokens[index.value]));
+                    index.value++;
+                } else {
+                    // Numeric argument or nested function
+                    const arg = this.parseArgumentExpression(tokens, index);
+                    args.push(arg);
+                }
+                
+                // Parse additional arguments (if any)
+                while (index.value < tokens.length && tokens[index.value] === ',') {
+                    index.value++; // Skip comma
+                    
+                    if (tokens[index.value].startsWith('[') && tokens[index.value].endsWith(']')) {
+                        // Array argument
+                        args.push(this.parseArray(tokens[index.value]));
+                        index.value++;
+                    } else {
+                        // Numeric argument or nested function
+                        const arg = this.parseArgumentExpression(tokens, index);
+                        args.push(arg);
+                    }
+                }
+            }
+            
+            if (index.value >= tokens.length || tokens[index.value] !== ')') {
+                throw new Error(`Mismatched parentheses: missing closing parenthesis for function ${funcName}`);
+            }
+            
+            index.value++; // Skip closing parenthesis
+            return this.evaluateFunction(funcName, args);
+        }
+        
+        // Otherwise, parse as a regular numeric expression
+        return this.parseExpression(tokens, index);
     }
 
     /**
@@ -259,8 +371,9 @@ export class ExpressionEvaluator {
                     args.push(this.parseArray(tokens[index.value]));
                     index.value++;
                 } else {
-                    // Numeric argument
-                    args.push(this.parseExpression(tokens, index));
+                    // Could be a numeric argument or a function call that returns an array
+                    const arg = this.parseArgumentExpression(tokens, index);
+                    args.push(arg);
                 }
                 
                 // Parse additional arguments (if any)
@@ -272,8 +385,9 @@ export class ExpressionEvaluator {
                         args.push(this.parseArray(tokens[index.value]));
                         index.value++;
                     } else {
-                        // Numeric argument
-                        args.push(this.parseExpression(tokens, index));
+                        // Could be a numeric argument or a function call that returns an array
+                        const arg = this.parseArgumentExpression(tokens, index);
+                        args.push(arg);
                     }
                 }
             }
@@ -283,7 +397,15 @@ export class ExpressionEvaluator {
             }
             
             index.value++; // Skip closing parenthesis
-            return this.evaluateFunction(funcName, args);
+            const result = this.evaluateFunction(funcName, args);
+            
+            // Functions that return arrays cannot be used directly in arithmetic expressions
+            // Only in the main expression parsing, not in argument parsing
+            if (Array.isArray(result)) {
+                throw new Error(`Function ${funcName}() returns an array and cannot be used directly in arithmetic expressions. Arrays can only be used as function arguments.`);
+            }
+            
+            return result;
         }
         
         throw new Error(`Unexpected token: ${token}`);

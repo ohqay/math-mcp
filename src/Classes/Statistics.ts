@@ -199,7 +199,7 @@ export class Statistics {
             throw new Error('p must be a valid number');
         }
         if (p < 0 || p > 100) {
-            throw new Error('p must be between 0 and 100');
+            throw new Error('Percentile must be between 0 and 100');
         }
         
         // Create a copy and sort the array
