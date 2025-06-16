@@ -43,6 +43,7 @@ lib/
 *.swo
 *~
 *.code-workspace
+.cursor
 
 # Environment variables
 .env
