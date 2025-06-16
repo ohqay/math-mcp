@@ -192,6 +192,75 @@ mathServer.tool("max", "Finds the maximum value from a list of numbers", {
 })
 
 /**
+ * Variance operation
+ * Calculates the population variance of an array of numbers
+ */
+mathServer.tool("variance", "Calculates the population variance of a list of numbers", {
+    numbers: z.array(z.number()).min(1).describe("Array of numbers to calculate the variance of")
+}, async ({ numbers }) => {
+    const value = Statistics.variance(numbers)
+
+    return {
+        content: [{
+            type: "text",
+            text: `${value}`
+        }]
+    }
+})
+
+/**
+ * Standard deviation operation
+ * Calculates the standard deviation of an array of numbers
+ */
+mathServer.tool("standardDeviation", "Calculates the standard deviation of a list of numbers", {
+    numbers: z.array(z.number()).min(1).describe("Array of numbers to calculate the standard deviation of")
+}, async ({ numbers }) => {
+    const value = Statistics.standardDeviation(numbers)
+
+    return {
+        content: [{
+            type: "text",
+            text: `${value}`
+        }]
+    }
+})
+
+/**
+ * Range operation
+ * Calculates the range (max - min) of an array of numbers
+ */
+mathServer.tool("range", "Calculates the range (difference between max and min) of a list of numbers", {
+    numbers: z.array(z.number()).min(1).describe("Array of numbers to calculate the range of")
+}, async ({ numbers }) => {
+    const value = Statistics.range(numbers)
+
+    return {
+        content: [{
+            type: "text",
+            text: `${value}`
+        }]
+    }
+})
+
+/**
+ * Percentile operation
+ * Calculates the percentile value of an array of numbers
+ */
+mathServer.tool("percentile", "Calculates the percentile value of a list of numbers", {
+    numbers: z.array(z.number()).min(1).describe("Array of numbers to calculate the percentile from"),
+    p: z.number().min(0).max(100).describe("The percentile to calculate (0-100)")
+}, async ({ numbers, p }) => {
+    const value = Statistics.percentile(numbers, p)
+
+    return {
+        content: [{
+            type: "text",
+            text: `${value}`
+        }]
+    }
+})
+
+/**
  * Floor operation
  * Rounds a number down to the nearest integer
  */
@@ -233,6 +302,55 @@ mathServer.tool("round", "Rounds a number to the nearest integer", {
     number: z.number().describe("The number to round"),
 }, async ({ number }) => {
     const value = Arithmetic.round(number)
+    return {
+        content: [{
+            type: "text",
+            text: `${value}`
+        }]
+    }
+})
+
+/**
+ * Power operation
+ * Raises a base number to the power of an exponent
+ */
+mathServer.tool("power", "Raises a base number to the power of an exponent", {
+    base: z.number().describe("The base number"),
+    exponent: z.number().describe("The exponent to raise the base to")
+}, async ({ base, exponent }) => {
+    const value = Arithmetic.power(base, exponent)
+    return {
+        content: [{
+            type: "text",
+            text: `${value}`
+        }]
+    }
+})
+
+/**
+ * Square root operation
+ * Calculates the square root of a number
+ */
+mathServer.tool("sqrt", "Calculates the square root of a number", {
+    number: z.number().min(0).describe("The number to find the square root of (must be non-negative)")
+}, async ({ number }) => {
+    const value = Arithmetic.sqrt(number)
+    return {
+        content: [{
+            type: "text",
+            text: `${value}`
+        }]
+    }
+})
+
+/**
+ * Absolute value operation
+ * Calculates the absolute value of a number
+ */
+mathServer.tool("abs", "Calculates the absolute value of a number", {
+    number: z.number().describe("The number to find the absolute value of")
+}, async ({ number }) => {
+    const value = Arithmetic.abs(number)
     return {
         content: [{
             type: "text",
